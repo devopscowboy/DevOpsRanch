@@ -1,48 +1,47 @@
 :root {
   color-scheme: light;
-  --bg: #f3efe7;
-  --bg-elev: #fbf8f3;
-  --ink: #1c2420;
-  --muted: #4e5852;
-  --line: #e0d6c8;
-  --accent: #1f5c3f;
-  --accent-contrast: #f4faf6;
-  --link: #1a5340;
-  --link-hover: #0f3a2c;
-  --clay: #8a4630;
-  --pill: #e5f0e8;
-  --pill-ink: #1a4632;
-  --code-bg: #17211d;
-  --code-fg: #e7f0ea;
-  --inline-code-bg: #e4eee7;
-  --inline-code-fg: #163528;
-  --callout: #f7f1e6;
-  --shadow: 0 1px 0 rgba(28, 36, 32, 0.04);
-  --serif: "Source Serif 4", "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  --bg: #f5f2ea;
+  --bg-elev: #fbf9f4;
+  --ink: #11281e;
+  --muted: #4a5a52;
+  --line: #ded6c6;
+  --accent: #0b6b4a;
+  --accent-contrast: #ffffff;
+  --link: #0a5c40;
+  --link-hover: #063d2a;
+  --clay: #7d5e22;
+  --pill: #e3efe8;
+  --pill-ink: #0a4a33;
+  --code-bg: #0e1f18;
+  --code-fg: #e3ede6;
+  --inline-code-bg: #e6efe9;
+  --inline-code-fg: #0b3a28;
+  --callout: #f8f1e2;
+  --shadow: 0 1px 0 rgba(17, 40, 30, 0.04);
   --sans: "IBM Plex Sans", "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #121614;
-  --bg-elev: #1b211e;
-  --ink: #ece7df;
-  --muted: #b7c0ba;
-  --line: #2d3833;
-  --accent: #8fbfa4;
-  --accent-contrast: #122018;
-  --link: #b7d7c6;
-  --link-hover: #d7eee2;
-  --clay: #e0b09a;
-  --pill: #24332c;
-  --pill-ink: #d5e8de;
-  --code-bg: #0e1512;
-  --code-fg: #e7f0ea;
-  --inline-code-bg: #24312c;
-  --inline-code-fg: #d5e8de;
-  --callout: #241c17;
-  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  --bg: #0f2a20;
+  --bg-elev: #153527;
+  --ink: #eceee4;
+  --muted: #aebdb4;
+  --line: #23452f;
+  --accent: #2fa878;
+  --accent-contrast: #06120d;
+  --link: #7fd3ae;
+  --link-hover: #b5ebd2;
+  --clay: #d6b56d;
+  --pill: #1a3d2c;
+  --pill-ink: #cbebd9;
+  --code-bg: #08160f;
+  --code-fg: #e3ede6;
+  --inline-code-bg: #1a3d2c;
+  --inline-code-fg: #cbebd9;
+  --callout: #1f1b10;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
 }
 
 *,
@@ -62,6 +61,15 @@ body {
   font-family: var(--sans);
   font-size: 1.02rem;
   line-height: 1.6;
+}
+
+:root[data-theme="dark"] body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(47, 168, 120, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 168, 120, 0.16) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: -1px -1px;
 }
 
 ::selection {
@@ -99,10 +107,10 @@ input {
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--serif);
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
 }
 
 .wrap {
@@ -160,10 +168,10 @@ h1, h2, h3, h4 {
   gap: 0.55rem;
   color: var(--ink);
   text-decoration: none;
-  font-family: var(--serif);
-  font-weight: 650;
-  font-size: 1.28rem;
-  letter-spacing: -0.02em;
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 1.12rem;
+  letter-spacing: -0.03em;
 }
 
 .brand:hover {
@@ -185,6 +193,8 @@ h1, h2, h3, h4 {
 .site-nav a {
   color: var(--muted);
   text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.92rem;
   font-weight: 500;
 }
 
@@ -195,6 +205,7 @@ h1, h2, h3, h4 {
 
 .site-nav a[aria-current="page"] {
   font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--clay);
 }
 
 .search-form {
@@ -245,6 +256,7 @@ h1, h2, h3, h4 {
 
 .search-kind {
   display: block;
+  font-family: var(--mono);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -254,9 +266,9 @@ h1, h2, h3, h4 {
 
 .search-hit strong {
   display: block;
-  font-family: var(--serif);
-  font-size: 1.05rem;
-  font-weight: 650;
+  font-family: var(--mono);
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .search-snippet {
@@ -316,9 +328,10 @@ main {
 
 .kicker {
   margin: 0 0 0.35rem;
+  font-family: var(--mono);
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--clay);
 }
@@ -354,15 +367,17 @@ h1 {
   padding: 0.22rem 0.7rem;
   cursor: pointer;
   color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.82rem;
 }
 
 .tag-btn:hover {
-  border-color: var(--accent);
+  border-color: var(--clay);
 }
 
 .tag-btn.is-active {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--clay);
+  border-color: var(--clay);
   color: var(--accent-contrast);
 }
 
@@ -381,9 +396,14 @@ a.card {
   text-decoration: none;
   color: inherit;
   background: var(--bg-elev);
-  border: 1px solid var(--line);
+  border: 1px solid #5f917a;
   border-radius: 12px;
   box-shadow: var(--shadow);
+}
+
+:root[data-theme="dark"] a.card {
+  border-color: rgba(47, 168, 120, 0.72);
+  box-shadow: 0 0 0 1px rgba(47, 168, 120, 0.1), 0 0 20px rgba(47, 168, 120, 0.1);
 }
 
 a.card:hover {
@@ -422,9 +442,11 @@ a.card p {
 
 .card-tags li,
 .tag-list a {
+  font-family: var(--mono);
   font-size: 0.75rem;
-  color: var(--pill-ink);
+  color: var(--clay);
   background: var(--pill);
+  border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.12rem 0.5rem;
   text-decoration: none;
@@ -530,13 +552,15 @@ a.card p {
   border-radius: 4px;
 }
 
-.highlighter-rouge,
+div.highlighter-rouge,
 .code-wrap {
   position: relative;
   margin: 0.9rem 0 1.1rem;
   background: var(--code-bg);
   color: var(--code-fg);
+  border: 1px solid rgba(47, 168, 120, 0.72);
   border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(47, 168, 120, 0.12), 0 0 22px rgba(47, 168, 120, 0.14);
 }
 
 .highlighter-rouge .highlight,
@@ -571,7 +595,7 @@ a.card p {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  border: 1px solid rgba(231, 240, 234, 0.25);
+  border: 1px solid rgba(47, 168, 120, 0.45);
   background: rgba(255, 255, 255, 0.08);
   color: var(--code-fg);
   border-radius: 6px;
@@ -582,27 +606,58 @@ a.card p {
   cursor: pointer;
 }
 
+/* Prompt glyph only. It is not in the DOM, so Copy leaves it behind. */
+div.language-bash.highlighter-rouge pre,
+div.language-sh.highlighter-rouge pre,
+div.language-shell.highlighter-rouge pre,
+div.language-console.highlighter-rouge pre,
+div.language-zsh.highlighter-rouge pre {
+  padding-left: 2.15rem;
+}
+
+div.language-bash.highlighter-rouge::before,
+div.language-sh.highlighter-rouge::before,
+div.language-shell.highlighter-rouge::before,
+div.language-console.highlighter-rouge::before,
+div.language-zsh.highlighter-rouge::before {
+  content: "$";
+  position: absolute;
+  z-index: 1;
+  top: 0.95rem;
+  left: 0.85rem;
+  color: #d6b56d;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.55;
+  pointer-events: none;
+}
+
 .copy-btn:hover,
 .copy-btn.is-copied {
   background: rgba(255, 255, 255, 0.16);
 }
 
+/* Keywords #E2C27D, strings #A8E0C0, comments #8FB0A2, numbers #F0D38E.
+   Shell flags are Rouge .nt; they use the keyword gold so command lines read. */
 .highlight .c,
 .highlight .c1,
 .highlight .cm,
 .highlight .cs {
-  color: #93b3a4;
+  color: #8fb0a2;
   font-style: italic;
 }
 
 .highlight .k,
+.highlight .kc,
 .highlight .kd,
 .highlight .kn,
 .highlight .kp,
 .highlight .kr,
 .highlight .kt,
-.highlight .ow {
-  color: #f0c7a4;
+.highlight .ow,
+.highlight .nt {
+  color: #e2c27d;
 }
 
 .highlight .s,
@@ -614,7 +669,7 @@ a.card p {
 .highlight .sh,
 .highlight .si,
 .highlight .sx {
-  color: #d7ebc8;
+  color: #a8e0c0;
 }
 
 .highlight .m,
@@ -623,21 +678,21 @@ a.card p {
 .highlight .mi,
 .highlight .mo,
 .highlight .il {
-  color: #f3d48a;
+  color: #f0d38e;
 }
 
 .highlight .nv,
 .highlight .vg,
 .highlight .vi,
 .highlight .na {
-  color: #f3d48a;
+  color: #f0d38e;
 }
 
 .highlight .nb,
 .highlight .nc,
 .highlight .nf,
 .highlight .nn {
-  color: #e7f0ea;
+  color: var(--code-fg);
 }
 
 .toc {
@@ -648,6 +703,7 @@ a.card p {
 
 .toc-label {
   margin: 0 0 0.4rem;
+  font-family: var(--mono);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.12em;
