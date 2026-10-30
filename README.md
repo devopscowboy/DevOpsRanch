@@ -40,6 +40,8 @@ tags:
 ---
 ```
 
+Exam study uses the same tag list. The Linux sheet carries `RHCSA`, the Ansible sheet carries `RHCE`, and the OpenShift sheet carries `EX280`.
+
 The body is Markdown. Use `##` for sections. Put commands in fenced code blocks with no `$` prompt, so the copy button pastes something you can run. A following fence or a short paragraph is the example. Blockquotes are for the warning that should stay next to the command.
 
 ````markdown
