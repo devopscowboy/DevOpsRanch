@@ -8,9 +8,9 @@ tags:
 updated: 2026-10-30
 ---
 
-These are GNU/Linux commands, written for RHEL 9 first. macOS and Debian differ on a few flags; those differences are called out next to the command. The same jobs done with a playbook are on the [Ansible sheet](/cheatsheets/ansible/).
+These are GNU/Linux commands for RHEL 7, 8, and 9. Where a release differs, the RHEL 9 command is labeled and the older one sits under it. macOS and Debian differ on a few flags; those differences are called out next to the command. The same jobs done with a playbook are on the [Ansible sheet](/cheatsheets/ansible/).
 
-Verified against the RHEL 9 product documentation for firewalld, SELinux, parted, LVM, and basic system settings.
+Verified against the RHEL 7 System Administrator's Guide (yum, networking, chrony, ntpd, systemd) and Security Guide (iptables), the RHEL 8 basic system settings and firewalld docs, and the RHEL 9 product documentation for firewalld, SELinux, parted, LVM, and basic system settings.
 
 ## Where you are
 
@@ -145,20 +145,35 @@ tar -xzf archive.tar.gz -C /opt
 
 ## Packages
 
+RHEL 8 and 9:
+
 ```bash
 sudo dnf install -y nginx
 sudo dnf provides '*/semanage'
 sudo dnf repolist
 sudo dnf history
 sudo dnf history undo 12
+```
+
+RHEL 7. `yum` is the package manager. On RHEL 8 and 9 the `yum` command still exists, and it calls `dnf`.
+
+```bash
+sudo yum install -y nginx
+sudo yum provides '*/semanage'
+sudo yum repolist
+sudo yum history
+sudo yum history undo 12
+```
+
+```bash
 rpm -qf /usr/bin/ss
 sudo apt-get update && sudo apt-get install -y nginx
 dpkg -S /usr/bin/ss
 ```
 
-Fedora, RHEL, and Amazon Linux 2023 use `dnf`. Amazon Linux 2 still uses `yum`. `dnf provides` answers which package ships a file, and `rpm -qf` answers which installed package owns a path that is already on disk. `dnf history undo 12` reverses that one transaction. `dnf history rollback 12` undoes every transaction after that id, which is a wider change. Debian and Ubuntu use `apt-get`, and `dpkg -S` is their "which package owns this file".
+`provides` answers which package ships a file, and `rpm -qf` answers which installed package owns a path that is already on disk. That `rpm` query is the same on RHEL 7, 8, and 9. `history undo 12` reverses that one transaction. On RHEL 8 and 9, `dnf history rollback 12` undoes every transaction after that id, which is a wider change. Later `dnf install` lines on this page are `yum install` on RHEL 7. Debian and Ubuntu use `apt-get`, and `dpkg -S` is their "which package owns this file".
 
-`semanage` is not installed on a minimal RHEL host. `dnf provides '*/semanage'` points at `policycoreutils-python-utils`.
+`semanage` is not installed on a minimal host. RHEL 8 and 9 ship it in `policycoreutils-python-utils`. RHEL 7 ships it in `policycoreutils-python`.
 
 ## Networking
 
@@ -176,9 +191,27 @@ curl -I https://example.com
 curl -sS -o /dev/null -w '%{http_code}\n' https://example.com
 ```
 
-`ip -br addr` is one line per interface. `nmcli` is how RHEL stores a connection so it survives reboot. Replace the connection name with one from `nmcli connection show`. `getent hosts` looks up a name the way an application does, including `/etc/hosts`. `dig` asks DNS only.
+`ip -br addr` is one line per interface. `nmcli` works on RHEL 7, 8, and 9 and stores the connection so it survives reboot. Replace the connection name with one from `nmcli connection show`. On RHEL 9, `nmcli` writes a keyfile under `/etc/NetworkManager/system-connections/`. `getent hosts` looks up a name the way an application does, including `/etc/hosts`. `dig` asks DNS only.
 
-The `bash -c` line is a TCP port check that needs no extra package. RHEL's `nc` is `ncat` from `nmap-ncat`, and that `ncat` has no `-z` scan flag, so `nc -zv host port` fails there. A successful `/dev/tcp` open exits 0. `timeout` keeps a filtered port from hanging the shell.
+RHEL 7 and RHEL 8 also read ifcfg files. This is `/etc/sysconfig/network-scripts/ifcfg-enp1s0`. It is a file, not a shell command. The keys match the RHEL 7 networking guide, plus `GATEWAY` and `DNS1` from `nm-settings-ifcfg-rh(5)`, which that guide points at.
+
+```text
+DEVICE=enp1s0
+BOOTPROTO=none
+ONBOOT=yes
+IPADDR=10.0.0.20
+PREFIX=24
+GATEWAY=10.0.0.1
+DNS1=10.0.0.1
+```
+
+```bash
+sudo ifup enp1s0
+```
+
+`ifup` and `ifdown` are the network-scripts commands. On RHEL 9 the ifcfg format is deprecated. Use `nmcli` there.
+
+The `bash -c` line is a TCP port check that needs no extra package. RHEL 7, 8, and 9 ship `nc` as `ncat` from `nmap-ncat`, and that `ncat` has no `-z` scan flag, so `nc -zv host port` fails on all three. A successful `/dev/tcp` open exits 0. `timeout` keeps a filtered port from hanging the shell.
 
 `curl -f` fails on HTTP errors, `-sS` stays quiet except for real errors, and `-L` follows redirects. `-I` fetches headers only. The `-w` form prints only the status code.
 
@@ -199,6 +232,15 @@ journalctl -u nginx -f
 `enable --now` starts the unit and starts it again on the next boot. `reload` tells the process to reread its config when the unit supports `ExecReload`. `restart` tears the process down. `systemctl --failed` lists units that did not come up.
 
 `systemctl edit nginx` writes a drop-in under `/etc/systemd/system/nginx.service.d/` and runs `daemon-reload` for you. A unit file you edited by hand still needs `sudo systemctl daemon-reload` before a restart will see it. `status` shows whether the unit is running and the last few log lines. `journalctl -u` is the full log for that unit. `--no-pager` matters in scripts, where an interactive pager would hang.
+
+`enable --now` is the combined form. RHEL 7's System Administrator's Guide shows start and enable as two commands. `service` and `chkconfig` are the RHEL 6 wrappers. RHEL 7 still ships them, and they call systemctl. Prefer `systemctl` on RHEL 7, 8, and 9.
+
+```bash
+sudo systemctl start nginx
+sudo systemctl enable nginx
+service nginx status
+sudo chkconfig nginx on
+```
 
 ## Shell habits
 
@@ -383,7 +425,19 @@ atq
 
 `at` runs a command once. It comes from the `at` package, and `atd` has to be running. `atq` lists the queue. `systemctl list-timers` is the systemd equivalent of "what is scheduled", including the next run time.
 
-`timedatectl` shows the clock, the timezone, and whether NTP is on. `set-ntp true` enables `chronyd`, which is the NTP client on RHEL 9. In `chronyc sources`, the line marked `^*` is the source the clock is following. `chronyc tracking` shows the current offset.
+`timedatectl` shows the clock, the timezone, and whether NTP is on. `set-ntp true` enables `chronyd`. `chronyd` is the default NTP client on RHEL 7, 8, and 9. In `chronyc sources`, the line marked `^*` is the source the clock is following. `chronyc tracking` shows the current offset.
+
+RHEL 7 can run `ntpd` from the `ntp` package instead. RHEL 8 and 9 removed that package. Stop `chronyd` first, or both daemons fight over the clock. `ntpstat` is the status command in the RHEL 7 ntp chapter. `ntpq -p` is the peer list from `ntpq(8)`, which that chapter references. RHEL 8's migration table maps `ntpd` to `chronyd` and `ntpq` to `chronyc`.
+
+```bash
+sudo systemctl stop chronyd
+sudo systemctl disable chronyd
+sudo yum install -y ntp
+sudo systemctl enable ntpd
+sudo systemctl start ntpd
+ntpstat
+ntpq -p
+```
 
 > In a crontab, an unescaped `%` is a newline and the rest of the line becomes stdin for the command. Write `\%` when the command itself needs a percent sign.
 
@@ -407,17 +461,35 @@ sudo firewall-cmd --add-service=http
 sudo firewall-cmd --runtime-to-permanent
 ```
 
+`firewalld` is the default firewall on RHEL 7, 8, and 9. The commands above are the same on all three.
+
+RHEL 7's other firewall is the `iptables` service from `iptables-services`. RHEL 8 still has that package, and its docs say to run only one of `firewalld`, `nftables`, or `iptables`. The rules file is `/etc/sysconfig/iptables`.
+
+```bash
+sudo systemctl disable firewalld
+sudo systemctl stop firewalld
+sudo yum install -y iptables-services
+sudo systemctl enable iptables
+sudo systemctl start iptables
+sudo iptables -L -n -v
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables-save | sudo tee /etc/sysconfig/iptables
+sudo service iptables save
+```
+
+`service iptables save` is the RHEL 7 service action. It writes the same `/etc/sysconfig/iptables` file. `dnf install iptables-services` is the RHEL 8 package command.
+
 On Ubuntu the matching tool is `ufw`:
 
 ```bash
 sudo ufw allow 80/tcp
 ```
 
-> A rule without `--permanent` disappears at the next reload. A `--permanent` rule does nothing to current traffic until you reload. After either change, check `--list-all` and a connection from outside the host, not only from localhost.
+> A firewalld rule without `--permanent` disappears at the next reload. A `--permanent` rule does nothing to current traffic until you reload. After either change, check `--list-all` and a connection from outside the host, not only from localhost. Do not run the `iptables` service and `firewalld` on the same host. RHEL 8 says the firewall services influence each other, so run only one.
 
 ## SELinux
 
-`semanage` is in `policycoreutils-python-utils`. Install that before the `semanage` lines.
+Install `semanage` before the `semanage` lines. RHEL 8 and 9: `policycoreutils-python-utils`. RHEL 7: `policycoreutils-python`.
 
 ```bash
 getenforce
@@ -444,10 +516,22 @@ sudo ausearch -m AVC -ts recent
 
 `lsblk -f` is the map of disks, filesystems, and UUIDs. `parted` below destroys what is already on `/dev/sdb`.
 
+RHEL 9, and any GPT disk. The partition needs a name. `mkpart` does not format anything. `mkfs.xfs` does.
+
 ```bash
 lsblk -f
 sudo parted --script /dev/sdb mklabel gpt mkpart data xfs 1MiB 100%
 sudo udevadm settle
+```
+
+Older hosts, and any MBR disk. `primary` is the MBR partition type. RHEL's parted rejects it as the type on GPT, on RHEL 7, 8, and 9 alike. Use it only after `mklabel msdos`.
+
+```bash
+sudo parted --script /dev/sdb mklabel msdos mkpart primary xfs 1MiB 10GiB
+sudo udevadm settle
+```
+
+```bash
 sudo pvcreate /dev/sdb1
 sudo vgcreate vgdata /dev/sdb1
 sudo lvcreate -n lvapp -L 5G vgdata
@@ -455,7 +539,7 @@ sudo mkfs.xfs /dev/vgdata/lvapp
 sudo blkid /dev/vgdata/lvapp
 ```
 
-On a GPT disk the partition needs a name. `primary` is an MBR partition type, and RHEL's parted rejects it as the type on GPT. `mkpart` does not format anything; `mkfs.xfs` does. `udevadm settle` waits until `/dev/sdb1` exists. A whole disk can be a physical volume with `pvcreate /dev/sdb` when you do not need a partition table. RHEL's LVM guide uses that form.
+`udevadm settle` waits until `/dev/sdb1` exists. A whole disk can be a physical volume with `pvcreate /dev/sdb` when you do not need a partition table. RHEL's LVM guide uses that form.
 
 Paste this into `/etc/fstab`. It is a file line, not a shell command. The UUID comes from `blkid`. The last two fields are dump and fsck pass. XFS uses `0 0`.
 
@@ -470,7 +554,7 @@ sudo mount -a
 sudo lvextend -r -L +2G /dev/vgdata/lvapp
 ```
 
-`daemon-reload` rebuilds the mount units from fstab. `findmnt --verify` checks the file before a reboot. `mount -a` mounts what is not mounted yet. `lvextend -r` grows the logical volume and the filesystem together. `+2G` adds two gigabytes. Without the plus sign, `-L 2G` sets the size to two gigabytes. XFS can grow only while it is mounted, which `lvextend -r` requires.
+`daemon-reload` rebuilds the mount units from fstab. On RHEL 8 and 9, `findmnt --verify` checks the file before a reboot. The RHEL 7 storage guide does not document that flag. Use `sudo mount -fav` there: `-f` fakes the mount, `-a` reads fstab, `-v` prints what it would do. `mount -a` mounts what is not mounted yet. `lvextend -r` grows the logical volume and the filesystem together. `+2G` adds two gigabytes. Without the plus sign, `-L 2G` sets the size to two gigabytes. XFS can grow only while it is mounted, which `lvextend -r` requires.
 
 Swap is a logical volume plus an fstab line. `swapon -a` enables only the swap devices listed in fstab, so the device has to be turned on by path until that line exists.
 
@@ -499,7 +583,7 @@ The matching `/etc/fstab` line:
 nfs01:/exports/share /mnt/share nfs defaults,_netdev 0 0
 ```
 
-> XFS grows and never shrinks. A bad fstab line drops the host into emergency mode on the next boot. Run `findmnt --verify` before you reboot.
+> XFS grows and never shrinks. A bad fstab line drops the host into emergency mode on the next boot. On RHEL 8 and 9 run `findmnt --verify` first. On RHEL 7 run `mount -fav`.
 
 ## Boot targets and recovery
 
@@ -514,7 +598,9 @@ sudo grubby --update-kernel=ALL --remove-args='console=ttyS0'
 
 `get-default` prints the target the host boots to. `multi-user.target` is text mode. `graphical.target` is the desktop. `isolate rescue.target` switches the running system to rescue, and it asks for the root password. `grubby --default-kernel` is the kernel that boots next. `--args` appends a kernel argument on every installed kernel. `--remove-args` takes it back off.
 
-Resetting a forgotten root password is a GRUB edit, then a shell. On RHEL 9 the default kernel entry often asks for the root password you do not have. Select the rescue kernel (the menu line with `rescue` in the name), press `e`, append `rd.break` to the line that starts with `linux`, and press `Ctrl+x`. If a maintenance prompt appears, press Enter. Then:
+Resetting a forgotten root password is a GRUB edit, then the same shell on every release. `passwd` with no user sets the root password inside the chroot. `/.autorelabel` makes SELinux relabel on the next boot, which restores the context on `/etc/shadow`. The relabel can take a long time and the host reboots itself when it finishes.
+
+RHEL 7 and RHEL 8: on the GRUB menu, press `e` on the default kernel. Append `rd.break` to the end of the kernel line. On RHEL 7 that line starts with `linux16`. On RHEL 8 it starts with `linux`. Press `Ctrl+x`. The prompt is `switch_root`.
 
 ```bash
 mount -o remount,rw /sysroot
@@ -525,7 +611,9 @@ exit
 exit
 ```
 
-`passwd` with no user sets the root password inside the chroot. `/.autorelabel` makes SELinux relabel on the next boot, which restores the context on `/etc/shadow`. The relabel can take a long time and the host reboots itself when it finishes.
+RHEL 8's kernel documentation also remounts `/` read-only before you leave the chroot: `mount -o remount,ro /`, then the two exits. RHEL 7's procedure stops at `touch /.autorelabel` and the exits.
+
+RHEL 9: the default kernel entry often asks for the root password you do not have (the `rd.break` break asks for maintenance credentials). Select the rescue kernel, the menu line with `rescue` in the name, press `e`, append `rd.break` to the line that starts with `linux`, and press `Ctrl+x`. If a maintenance prompt appears, press Enter. Then run the same four commands and the two exits.
 
 ## Performance and tuning
 

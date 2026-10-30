@@ -10,7 +10,7 @@ updated: 2026-10-30
 
 EX294 on RHEL 9 is Ansible automation of the RHCSA tasks: packages, services, firewalld, filesystems, users, and scheduled jobs. Run playbooks with `ansible-navigator` and with `ansible-playbook`. Use fully qualified module names (`ansible.builtin.copy`). The Linux commands those modules replace are on the [Linux sheet](/cheatsheets/linux/). Clone and commit, which the exam also asks for, are on the [Git sheet](/cheatsheets/git/).
 
-Verified against ansible-core 2.16.3 (`ansible-playbook -J`, `ansible-config init --disabled`, `ansible-inventory --graph`) and the current ansible-navigator and `ansible.builtin.default` callback docs. Navigator's own subcommands were checked from those docs.
+Verified against ansible-core 2.16.3 (`ansible-playbook -J`, `ansible-config init --disabled`, `ansible-inventory --graph`), the current ansible-navigator and `ansible.builtin.default` callback docs, and the RHEL 7, 8, and 9 package-manager docs for `yum` and `dnf`. Navigator's own subcommands were checked from those docs.
 
 ## Check your setup
 
@@ -72,11 +72,13 @@ web
 
 `web[01:03].example.com` expands to three hosts. `[prod:children]` is a group of groups. Connection variables can live on the host line or in files next to the inventory: `group_vars/web.yml` and `host_vars/web1.yml`.
 
+RHEL 8 and 9 have no `/usr/bin/python`. Point the interpreter at Python 3:
+
 ```ini
 ansible_python_interpreter=/usr/bin/python3
 ```
 
-Set that on a host whose `/usr/bin/python` does not exist. RHEL 9 has `python3` only.
+RHEL 7's platform Python is `/usr/bin/python` (2.7). Leave the variable unset there when the controller still accepts it. ansible-core 2.16 deprecates Python 2.7 on targets, and 2.17 removes it. A newer controller needs Python 3 installed on the RHEL 7 host and this variable pointed at that binary.
 
 ## Ad-hoc commands
 
@@ -84,12 +86,13 @@ Set that on a host whose `/usr/bin/python` does not exist. RHEL 9 has `python3` 
 ansible web -i inventory -a 'uptime'
 ansible web -i inventory -m ansible.builtin.shell -a 'df -h | grep /var'
 ansible web -i inventory -b -m ansible.builtin.dnf -a 'name=httpd state=present'
+ansible web -i inventory -b -m ansible.builtin.yum -a 'name=httpd state=present'
 ansible web -i inventory -b -m ansible.builtin.service -a 'name=httpd state=started enabled=true'
 ansible web -i inventory -b -m ansible.builtin.copy -a 'src=motd dest=/etc/motd'
 ansible web -i inventory -m ansible.builtin.setup -a 'filter=ansible_distribution*'
 ```
 
-The default module is `ansible.builtin.command`, which does not pass the line through a shell. Pipes and redirects need `ansible.builtin.shell`. `-b` is become (sudo on RHEL). `ansible.builtin.package` picks `dnf` on RHEL if you would rather not name the manager. `setup` with a filter returns a slice of facts instead of the whole tree.
+The default module is `ansible.builtin.command`, which does not pass the line through a shell. Pipes and redirects need `ansible.builtin.shell`. `-b` is become (sudo on RHEL). `ansible.builtin.dnf` is the RHEL 8 and 9 package module. `ansible.builtin.yum` is the RHEL 7 module. `ansible.builtin.package` picks the manager for the host if you would rather not name it. `setup` with a filter returns a slice of facts instead of the whole tree.
 
 > `command` and `shell` are the last resort. They report `changed` on every run unless you set `changed_when`. A module knows when the system was already in the requested state.
 
@@ -120,9 +123,9 @@ ansible-playbook site.yml -i inventory -vvv -f 20
 
 Install `ansible.posix` and `community.general` before the modules that are not in `ansible.builtin`. The install commands are under [Roles and collections](#roles-and-collections).
 
-- Packages and repos: `ansible.builtin.dnf`, `ansible.builtin.package`, `ansible.builtin.yum_repository`.
-- Services: `ansible.builtin.service`, `ansible.builtin.systemd_service` (`ansible.builtin.systemd` is the old name of the same module).
-- Firewall: `ansible.posix.firewalld` with `permanent: true` and `immediate: true`. Permanent without immediate is the same trap as `firewall-cmd --permanent` without a reload.
+- Packages and repos: `ansible.builtin.dnf` on RHEL 8 and 9, `ansible.builtin.yum` on RHEL 7, `ansible.builtin.package` when the play targets both. `ansible.builtin.yum_repository` writes the repo file on either generation.
+- Services: `ansible.builtin.service` follows the host's service manager, which is systemd on RHEL 7, 8, and 9. `ansible.builtin.systemd_service` is the systemd module (`ansible.builtin.systemd` is the old name).
+- Firewall: `ansible.posix.firewalld` on RHEL 7, 8, and 9, with `permanent: true` and `immediate: true`. Permanent without immediate is the same trap as `firewall-cmd --permanent` without a reload. `ansible.builtin.iptables` matches the older `iptables` service. Do not manage the same host with both.
 - Users, groups, keys: `ansible.builtin.user`, `ansible.builtin.group`, `ansible.posix.authorized_key`.
 - Files: `ansible.builtin.copy` and `ansible.builtin.template` for a Jinja file. `ansible.builtin.lineinfile` edits one line. `ansible.builtin.blockinfile` edits a marked block. `ansible.builtin.file` creates directories (`state: directory`), symlinks, and deletions (`state: absent`).
 - Storage: `community.general.parted`, `community.general.lvg`, `community.general.lvol`, `community.general.filesystem`, and `ansible.posix.mount` for fstab.
@@ -243,7 +246,7 @@ ansible-playbook site.yml -i inventory -vvv --limit web1
 
 `UNREACHABLE` is SSH, DNS, or the inventory. It is not a task failure. `--graph` shows whether the host is in the group the play targets. `--syntax-check` catches indentation and quoting. `-vvv` shows the SSH command and the module arguments.
 
-Permission denied from a module that edits the system means the task needs `become: true` or the command needs `-b`. Add `-K` when sudo asks for a password. `/usr/bin/python: not found` means `ansible_python_interpreter=/usr/bin/python3` on that host.
+Permission denied from a module that edits the system means the task needs `become: true` or the command needs `-b`. Add `-K` when sudo asks for a password. `/usr/bin/python: not found` on RHEL 8 or 9 means `ansible_python_interpreter=/usr/bin/python3` on that host. On RHEL 7 that path is the Python 2.7 interpreter, and the error means the controller no longer accepts it.
 
 ```bash
 ansible-playbook site.yml -i inventory --start-at-task 'Install packages' --limit web1

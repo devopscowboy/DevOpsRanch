@@ -9,7 +9,9 @@ updated: 2026-10-30
 
 This is the slice used to automate a host, an API, or a cluster. It is not a language tutorial. Shell commands the scripts call out to are on the [Linux sheet](/cheatsheets/linux/) and the [OpenShift sheet](/cheatsheets/openshift/).
 
-Verified against Python 3.12.3 (venv, subprocess, pathlib, json, argparse, logging) and PyYAML 6.0.1. `requests`, `boto3`, and the Kubernetes client were checked from their docs and were not imported on this machine.
+Verified against Python 3.12.3 (venv, subprocess, pathlib, json, argparse, logging) and PyYAML 6.0.1. `requests`, `boto3`, and the Kubernetes client were checked from their docs and were not imported on this machine. The interpreter names were checked against RHEL 7 (`python` is 2.7) and RHEL 8 and 9 (`python3`).
+
+On RHEL 8 and 9 the command below is `python3`. On RHEL 7 the system command is `python`, which is Python 2.7. Python 3 is a separate package there and is not the default interpreter. `python3 -m venv` needs that Python 3 install.
 
 ## Virtual environments and pip
 
