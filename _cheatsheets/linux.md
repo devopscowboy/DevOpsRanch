@@ -10,7 +10,7 @@ updated: 2026-10-30
 
 These are GNU/Linux commands for RHEL 7, 8, and 9. Where a release differs, the RHEL 9 command is labeled and the older one sits under it. macOS and Debian differ on a few flags; those differences are called out next to the command. The same jobs done with a playbook are on the [Ansible sheet](/cheatsheets/ansible/).
 
-Verified against the RHEL 7 System Administrator's Guide (yum, networking, chrony, ntpd, systemd) and Security Guide (iptables), the RHEL 8 basic system settings and firewalld docs, and the RHEL 9 product documentation for firewalld, SELinux, parted, LVM, and basic system settings.
+Verified against the RHEL 7 System Administrator's Guide (yum, networking, chrony, ntpd, systemd) and Security Guide (iptables), the RHEL 8 basic system settings and firewalld docs, and the RHEL 9 product documentation for firewalld, SELinux, parted, LVM, and basic system settings. `nc -zv` was checked against the netcat-openbsd man page on Ubuntu 24.04.
 
 ## Where you are
 
@@ -186,6 +186,7 @@ sudo nmcli connection up "Wired connection 1"
 getent hosts api.internal
 dig +short example.com
 timeout 3 bash -c 'echo >/dev/tcp/db.internal/5432'
+nc -zv db.internal 5432
 curl -fsSL https://example.com
 curl -I https://example.com
 curl -sS -o /dev/null -w '%{http_code}\n' https://example.com
@@ -211,7 +212,7 @@ sudo ifup enp1s0
 
 `ifup` and `ifdown` are the network-scripts commands. On RHEL 9 the ifcfg format is deprecated. Use `nmcli` there.
 
-The `bash -c` line is a TCP port check that needs no extra package. RHEL 7, 8, and 9 ship `nc` as `ncat` from `nmap-ncat`, and that `ncat` has no `-z` scan flag, so `nc -zv host port` fails on all three. A successful `/dev/tcp` open exits 0. `timeout` keeps a filtered port from hanging the shell.
+The `bash -c` line is the RHEL port check. It needs no extra package. A successful `/dev/tcp` open exits 0, and `timeout` keeps a filtered port from hanging the shell. `nc -zv` is the Ubuntu and Debian check. Their `nc` is netcat-openbsd, and `-z` only scans for a listening daemon without sending data (`-v` prints the result). RHEL's `nc` is nmap-ncat and has no `-z`.
 
 `curl -f` fails on HTTP errors, `-sS` stays quiet except for real errors, and `-L` follows redirects. `-I` fetches headers only. The `-w` form prints only the status code.
 
