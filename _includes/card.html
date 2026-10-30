@@ -1,4 +1,4 @@
-<a class="card" href="{{ include.item.url | relative_url }}" data-tags="{{ include.item.tags | join: ' ' | escape }}">
+<a class="card" href="{{ include.item.url | relative_url }}" data-tags="{{ include.item.tags | jsonify | escape }}">
   <h3>{{ include.item.title | escape }}</h3>
   {% if include.item.description %}
     <p>{{ include.item.description | escape }}</p>
@@ -6,7 +6,7 @@
   {% if include.item.tags.size > 0 %}
     <ul class="card-tags">
       {% for tag in include.item.tags %}
-        <li>{{ tag | replace: "-", " " | escape }}</li>
+        <li>{{ tag | escape }}</li>
       {% endfor %}
     </ul>
   {% endif %}

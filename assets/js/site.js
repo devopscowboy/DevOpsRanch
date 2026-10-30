@@ -30,6 +30,17 @@
     }
   }
 
+  function tagsFromCard(card) {
+    var raw = card.getAttribute("data-tags") || "[]";
+    try {
+      var parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed.map(function (tag) { return String(tag); });
+      }
+    } catch (err) {}
+    return [];
+  }
+
   function tokensFrom(value) {
     return String(value || "")
       .trim()
@@ -170,7 +181,7 @@
     var cards = document.querySelectorAll("#browser .card");
     var visible = 0;
     cards.forEach(function (card) {
-      var tags = (card.dataset.tags || "").split(/\s+/).filter(Boolean);
+      var tags = tagsFromCard(card);
       var tagOk = !activeTag || tags.indexOf(activeTag) !== -1;
       var queryOk = true;
       if (tokens.length) {

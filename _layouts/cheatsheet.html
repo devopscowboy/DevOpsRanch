@@ -12,7 +12,7 @@ layout: default
     {% if page.tags.size > 0 %}
       <ul class="tag-list">
         {% for tag in page.tags %}
-          <li><a href="{{ '/' | relative_url }}?tag={{ tag | uri_encode }}">{{ tag | replace: "-", " " | escape }}</a></li>
+          <li><a href="{{ '/' | relative_url }}?tag={{ tag | uri_escape }}">{{ tag | escape }}</a></li>
         {% endfor %}
       </ul>
     {% endif %}

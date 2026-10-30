@@ -26,7 +26,7 @@ Front matter sits between the `---` lines at the top:
 | --- | --- | --- |
 | `title` | yes | Page heading and card title |
 | `description` | yes | Card text, and it is part of search |
-| `tags` | yes | YAML list. Every tag is a filter chip. Sheets are ordered by the first tag, so sheets that share a first tag sit together. Write the tag the way it should read: `AWS`, `kubectl`, `Bash` |
+| `tags` | yes | YAML list. Every tag is a filter chip, and a tag may contain spaces (`Cloud Native`). Sheets are ordered by the first tag, so sheets that share a first tag sit together. Write the tag the way it should read: `AWS`, `kubectl`, `Bash` |
 | `updated` | no | Date (`2026-10-30`) shown on the page |
 
 `tags` has to be a YAML list. A bare string will not filter correctly.

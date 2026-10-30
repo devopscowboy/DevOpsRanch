@@ -21,7 +21,7 @@ description: Personal DevOps cheat sheets and notes for commands worth keeping.
     {% for tag in all_tags %}
       {% assign tag_clean = tag | strip %}
       {% if tag_clean != "" %}
-        <button type="button" class="tag-btn" data-tag="{{ tag_clean }}" aria-pressed="false">{{ tag_clean | replace: "-", " " | escape }}</button>
+        <button type="button" class="tag-btn" data-tag="{{ tag_clean | escape }}" aria-pressed="false">{{ tag_clean | escape }}</button>
       {% endif %}
     {% endfor %}
   </div>
