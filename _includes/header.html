@@ -1,0 +1,31 @@
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="1.2" y="1.2" width="29.6" height="29.6" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M7 23.5h18M9.5 23.5V14M16 23.5V9M22.5 23.5V15.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <span>DevOps Ranch</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="{{ '/' | relative_url }}" {% if page.url == "/" or page.collection == "cheatsheets" %}aria-current="page"{% endif %}>Sheets</a>
+      <a href="{{ '/notes/' | relative_url }}" {% if page.url == "/notes/" or page.collection == "notes" %}aria-current="page"{% endif %}>Notes</a>
+    </nav>
+    <form class="search-form" id="search-form" role="search">
+      <label class="sr-only" for="site-search">Search cheat sheets and notes</label>
+      <input id="site-search" type="search" placeholder="Search commands and notes" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-controls="search-results" aria-expanded="false" title="Search cheat sheets and notes. Press / to focus.">
+      <div id="search-results" class="search-results" role="listbox" hidden></div>
+    </form>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Use dark theme">
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M14.5 2.5a8.8 8.8 0 1 0 7 12.2A7.2 7.2 0 0 1 14.5 2.5z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.1 5.1l1.6 1.6M17.3 17.3l1.6 1.6M18.9 5.1l-1.6 1.6M6.7 17.3l-1.6 1.6"/>
+      </svg>
+    </button>
+  </div>
+</header>
+<p id="search-status" class="sr-only" aria-live="polite"></p>

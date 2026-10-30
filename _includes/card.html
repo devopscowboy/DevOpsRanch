@@ -1,0 +1,13 @@
+<a class="card" href="{{ include.item.url | relative_url }}" data-tags="{{ include.item.tags | join: ' ' | escape }}">
+  <h3>{{ include.item.title | escape }}</h3>
+  {% if include.item.description %}
+    <p>{{ include.item.description | escape }}</p>
+  {% endif %}
+  {% if include.item.tags.size > 0 %}
+    <ul class="card-tags">
+      {% for tag in include.item.tags %}
+        <li>{{ tag | replace: "-", " " | escape }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</a>
