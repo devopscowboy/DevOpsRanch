@@ -1,0 +1,19 @@
+---
+layout: null
+permalink: /search.json
+---
+[
+{%- assign sheets = site.cheatsheets | sort: "title" -%}
+{%- assign notes = site.notes | sort: "title" -%}
+{%- assign first_item = true -%}
+{%- for sheet in sheets -%}
+{%- unless first_item -%},{%- endunless -%}
+{%- assign first_item = false -%}
+{"kind":"Cheat sheet","title":{{ sheet.title | jsonify }},"description":{{ sheet.description | default: "" | jsonify }},"tags":{{ sheet.tags | jsonify }},"url":{{ sheet.url | relative_url | jsonify }},"text":{{ sheet.content | strip_html | normalize_whitespace | jsonify }}}
+{%- endfor -%}
+{%- for note in notes -%}
+{%- unless first_item -%},{%- endunless -%}
+{%- assign first_item = false -%}
+{"kind":"Note","title":{{ note.title | jsonify }},"description":{{ note.description | default: "" | jsonify }},"tags":{{ note.tags | jsonify }},"url":{{ note.url | relative_url | jsonify }},"text":{{ note.content | strip_html | normalize_whitespace | jsonify }}}
+{%- endfor -%}
+]

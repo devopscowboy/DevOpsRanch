@@ -1,0 +1,59 @@
+---
+layout: default
+title: DevOps Ranch
+description: Personal DevOps cheat sheets and notes for commands worth keeping.
+---
+{% assign sheets = site.cheatsheets | sort: "title" %}
+{% assign notes = site.notes | sort: "title" %}
+{% capture tag_blob %}{% for sheet in sheets %}{% for tag in sheet.tags %}{{ tag }}|{% endfor %}{% endfor %}{% endcapture %}
+{% assign all_tags = tag_blob | split: "|" | uniq | sort %}
+
+<section class="hero">
+  <p class="kicker">Personal reference</p>
+  <h1>Cheat sheets for the work, notes for the rest.</h1>
+  <p class="lede">{{ site.tagline }}</p>
+  <p class="meta">{{ sheets.size }} cheat sheets · {{ notes.size }} {% if notes.size == 1 %}note{% else %}notes{% endif %}</p>
+</section>
+
+<div id="browser">
+  <div class="tag-bar" role="toolbar" aria-label="Filter by tag">
+    <button type="button" class="tag-btn is-active" data-tag="" aria-pressed="true">All</button>
+    {% for tag in all_tags %}
+      {% assign tag_clean = tag | strip %}
+      {% if tag_clean != "" %}
+        <button type="button" class="tag-btn" data-tag="{{ tag_clean | escape }}" aria-pressed="false">{{ tag_clean | escape }}</button>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div id="card-grid" class="cards">
+    {% for tag in all_tags %}
+      {% assign tag_clean = tag | strip %}
+      {% if tag_clean != "" %}
+        {% for sheet in sheets %}
+          {% assign primary = sheet.tags | first %}
+          {% if primary == tag_clean %}
+            {% include card.html item=sheet %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    {% for sheet in sheets %}
+      {% if sheet.tags.size == 0 %}
+        {% include card.html item=sheet %}
+      {% endif %}
+    {% endfor %}
+  </div>
+  <p id="empty-state" class="empty-state" hidden>No cheat sheets match that filter.</p>
+</div>
+
+{% if notes.size > 0 %}
+  <section class="notes-block" aria-labelledby="notes-heading">
+    <h2 id="notes-heading">Notes</h2>
+    <div class="cards">
+      {% for note in notes %}
+        {% include card.html item=note %}
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}

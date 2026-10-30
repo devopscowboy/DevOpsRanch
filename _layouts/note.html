@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<article class="doc">
+  <header class="doc-header">
+    <p class="crumbs"><a href="{{ '/notes/' | relative_url }}">Notes</a> <span aria-hidden="true">/</span> {{ page.title | escape }}</p>
+    <p class="kicker">Note</p>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.description %}
+      <p class="lede">{{ page.description | escape }}</p>
+    {% endif %}
+    {% if page.updated %}
+      <p class="meta">Updated <time datetime="{{ page.updated | date: '%Y-%m-%d' }}">{{ page.updated | date: "%B %-d, %Y" }}</time></p>
+    {% endif %}
+  </header>
+  <div class="doc-layout">
+    <div class="prose">
+      {{ content }}
+    </div>
+    <nav class="toc" aria-label="On this page" hidden></nav>
+  </div>
+</article>

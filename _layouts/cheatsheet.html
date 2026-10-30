@@ -1,0 +1,29 @@
+---
+layout: default
+---
+<article class="doc">
+  <header class="doc-header">
+    <p class="crumbs"><a href="{{ '/' | relative_url }}">Sheets</a> <span aria-hidden="true">/</span> {{ page.title | escape }}</p>
+    <p class="kicker">Cheat sheet</p>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.description %}
+      <p class="lede">{{ page.description | escape }}</p>
+    {% endif %}
+    {% if page.tags.size > 0 %}
+      <ul class="tag-list">
+        {% for tag in page.tags %}
+          <li><a href="{{ '/' | relative_url }}?tag={{ tag | uri_escape }}">{{ tag | escape }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if page.updated %}
+      <p class="meta">Updated <time datetime="{{ page.updated | date: '%Y-%m-%d' }}">{{ page.updated | date: "%B %-d, %Y" }}</time></p>
+    {% endif %}
+  </header>
+  <div class="doc-layout">
+    <div class="prose">
+      {{ content }}
+    </div>
+    <nav class="toc" aria-label="On this page" hidden></nav>
+  </div>
+</article>

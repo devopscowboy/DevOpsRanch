@@ -1,0 +1,58 @@
+title: DevOps Ranch
+description: Personal DevOps cheat sheets and notes.
+tagline: Commands, notes, and the things worth remembering.
+url: https://devopsranch.com
+baseurl: ""
+lang: en
+author: Jesse
+
+# GitHub Pages defaults to the Primer theme. Null keeps our layouts and CSS.
+theme: null
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+# Every Markdown file in these folders becomes a page. Nothing else has to
+# be edited to list a new sheet or note.
+collections:
+  cheatsheets:
+    output: true
+    permalink: /cheatsheets/:name/
+  notes:
+    output: true
+    permalink: /notes/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: cheatsheets
+    values:
+      layout: cheatsheet
+      tags: []
+  - scope:
+      path: ""
+      type: notes
+    values:
+      layout: note
+      tags: []
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: default
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - templates
+  - .bundle
+  - node_modules

@@ -1,0 +1,23 @@
+---
+layout: default
+title: Notes
+permalink: /notes/
+description: Longer notes that sit beside the cheat sheets.
+---
+{% assign notes = site.notes | sort: "title" %}
+
+<header class="doc-header">
+  <p class="kicker">Notebook</p>
+  <h1>Notes</h1>
+  <p class="lede">Write-ups, checklists, and anything that is not a command sheet. Each Markdown file in the notes folder is a page.</p>
+</header>
+
+{% if notes.size == 0 %}
+  <p class="empty-state">No notes yet.</p>
+{% else %}
+  <div class="cards">
+    {% for note in notes %}
+      {% include card.html item=note %}
+    {% endfor %}
+  </div>
+{% endif %}
