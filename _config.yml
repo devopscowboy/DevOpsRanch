@@ -4,7 +4,6 @@ tagline: Commands, notes, and the things worth remembering.
 url: https://devopsranch.com
 baseurl: ""
 lang: en
-author: Jesse
 
 # GitHub Pages defaults to the Primer theme. Null keeps our layouts and CSS.
 theme: null
