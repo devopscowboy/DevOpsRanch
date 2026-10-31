@@ -334,7 +334,7 @@ A drop-in under `/etc/sudoers.d` beats editing `/etc/sudoers`. `visudo -c -f` pa
 ## SSH keys, tunnels, and file transfer
 
 ```bash
-ssh-keygen -t ed25519 -C 'jesse@laptop'
+ssh-keygen -t ed25519 -C 'devopscowboy@laptop'
 ssh-copy-id alice@web01
 ssh -J bastion alice@10.0.1.20
 ssh -N -L 8443:localhost:443 alice@web01
