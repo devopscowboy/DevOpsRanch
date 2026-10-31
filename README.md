@@ -1,32 +1,13 @@
 # DevOps Ranch
 
-DevOps Ranch is a collection of DevOps cheat sheets and notes. The site is at [https://devopsranch.com](https://devopsranch.com).
+DevOps Ranch is a public set of cheat sheets and notes for people who run Linux, containers, and cloud systems, and for anyone studying the Red Hat exams.
 
-## What's here
+The site is at [https://devopsranch.com](https://devopsranch.com).
 
-- Cheat sheets for commands and day-to-day reference
-- Notes for checklists and write-ups
+## What you'll find
 
-## Add a cheat sheet
+Cheat sheets by topic: Linux and Bash, Git, Ansible, Docker, Kubernetes, OpenShift, Terraform, the AWS CLI, and Python for automation.
 
-Cheat sheets are Markdown files. Front matter sits between the `---` lines at the top of the file:
+Exam tags sit on the sheets they belong to. Linux is tagged RHCSA, Ansible is tagged RHCE, and OpenShift is tagged EX280.
 
-| Field | Required | What it does |
-| --- | --- | --- |
-| `title` | yes | Page heading and card title |
-| `description` | yes | Card text, and it is part of search |
-| `tags` | yes | YAML list. Every tag is a filter chip, and a tag may contain spaces |
-| `updated` | no | Date (`2026-10-30`) shown on the page |
-
-`tags` has to be a YAML list. A bare string will not filter correctly.
-
-```yaml
----
-title: Ansible
-description: Playbooks, ad-hoc commands, and inventory.
-tags:
-  - Ansible
----
-```
-
-Notes use the same kind of front matter: `title`, `description`, and optional `tags` and `updated`.
+Notes are the longer pieces, including a checklist for a production change.
