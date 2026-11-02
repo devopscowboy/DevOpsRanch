@@ -12,22 +12,26 @@
   <meta property="og:description" content="{{ summary | strip | escape }}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ page.url | absolute_url }}">
-  <link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
+  {% include icons.html %}
+  <meta name="theme-color" content="#F7F5F0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
   <script>
     (function () {
+      var theme = "light";
       try {
-        var theme = localStorage.getItem("theme");
+        theme = localStorage.getItem("theme");
         if (theme !== "light" && theme !== "dark") {
           theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         }
-        document.documentElement.setAttribute("data-theme", theme);
       } catch (err) {
-        document.documentElement.setAttribute("data-theme", "light");
+        theme = "light";
       }
+      document.documentElement.setAttribute("data-theme", theme);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", theme === "dark" ? "#0B0B0C" : "#F7F5F0");
     })();
   </script>
 </head>

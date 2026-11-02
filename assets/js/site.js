@@ -340,6 +340,8 @@
     var dark = document.documentElement.getAttribute("data-theme") === "dark";
     toggle.setAttribute("aria-label", dark ? "Use light theme" : "Use dark theme");
     toggle.setAttribute("aria-pressed", dark ? "true" : "false");
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? "#0B0B0C" : "#F7F5F0");
   }
 
   if (toggle) {

@@ -1,46 +1,50 @@
+/* Black, white, and gold. Token names match the previous theme.
+   Headings use --clay (brass in light, gold in dark). Link text is black
+   in light and off-white in dark, and content links stay underlined, so a
+   link never reads as a gold heading. */
 :root {
   color-scheme: light;
-  --bg: #f5f2ea;
-  --bg-elev: #fbf9f4;
-  --ink: #11281e;
-  --muted: #4a5a52;
-  --line: #ded6c6;
-  --accent: #0b6b4a;
-  --accent-contrast: #ffffff;
-  --link: #0a5c40;
-  --link-hover: #063d2a;
-  --clay: #7d5e22;
-  --pill: #e3efe8;
-  --pill-ink: #0a4a33;
-  --code-bg: #0e1f18;
-  --code-fg: #e3ede6;
-  --inline-code-bg: #e6efe9;
-  --inline-code-fg: #0b3a28;
-  --callout: #f8f1e2;
-  --shadow: 0 1px 0 rgba(17, 40, 30, 0.04);
+  --bg: #F7F5F0;
+  --bg-elev: #FFFFFF;
+  --ink: #111111;
+  --muted: #55534E;
+  --line: #E2DED4;
+  --accent: #7D5E22;
+  --accent-contrast: #FFFFFF;
+  --link: #111111;
+  --link-hover: #000000;
+  --clay: #7D5E22;
+  --pill: #F1EADB;
+  --pill-ink: #5A4316;
+  --code-bg: #0B0B0C;
+  --code-fg: #EAE8E2;
+  --inline-code-bg: #EFEBE2;
+  --inline-code-fg: #3A2C10;
+  --callout: #F8F1E2;
+  --shadow: 0 1px 0 rgba(17, 17, 17, 0.05);
   --sans: "IBM Plex Sans", "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0f2a20;
-  --bg-elev: #153527;
-  --ink: #eceee4;
-  --muted: #aebdb4;
-  --line: #23452f;
-  --accent: #2fa878;
-  --accent-contrast: #06120d;
-  --link: #7fd3ae;
-  --link-hover: #b5ebd2;
-  --clay: #d6b56d;
-  --pill: #1a3d2c;
-  --pill-ink: #cbebd9;
-  --code-bg: #08160f;
-  --code-fg: #e3ede6;
-  --inline-code-bg: #1a3d2c;
-  --inline-code-fg: #cbebd9;
-  --callout: #1f1b10;
+  --bg: #0B0B0C;
+  --bg-elev: #141415;
+  --ink: #F2F0EA;
+  --muted: #ABA9A2;
+  --line: #2A2A2C;
+  --accent: #E3BF6A;
+  --accent-contrast: #0B0B0C;
+  --link: #F2F0EA;
+  --link-hover: #FFFFFF;
+  --clay: #E3BF6A;
+  --pill: #1E1C17;
+  --pill-ink: #E8D7AE;
+  --code-bg: #050505;
+  --code-fg: #EAE8E2;
+  --inline-code-bg: #1C1C1E;
+  --inline-code-fg: #EDE6D3;
+  --callout: #1A160D;
   --shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
 }
 
@@ -63,23 +67,9 @@ body {
   line-height: 1.6;
 }
 
-:root[data-theme="dark"] body {
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(rgba(47, 168, 120, 0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(47, 168, 120, 0.16) 1px, transparent 1px);
-  background-size: 28px 28px;
-  background-position: -1px -1px;
-}
-
 ::selection {
-  background: #d7ecdf;
-  color: #10241a;
-}
-
-:root[data-theme="dark"] ::selection {
-  background: #2f5344;
-  color: #f4faf6;
+  background: #E3BF6A;
+  color: #111111;
 }
 
 img {
@@ -111,6 +101,7 @@ h1, h2, h3, h4 {
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1.25;
+  color: var(--clay);
 }
 
 .wrap {
@@ -179,11 +170,26 @@ h1, h2, h3, h4 {
 }
 
 .brand-logo {
+  display: none;
+  height: 48px;
+}
+
+.brand-logo img {
   display: block;
+  height: 48px;
   width: auto;
-  height: auto;
-  max-height: 48px;
-  max-width: min(16rem, 62vw);
+}
+
+.brand-logo-light {
+  display: block;
+}
+
+:root[data-theme="dark"] .brand-logo-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .brand-logo-dark {
+  display: block;
 }
 
 .site-nav {
@@ -286,15 +292,10 @@ h1, h2, h3, h4 {
 }
 
 mark {
-  background: #efe0b5;
-  color: inherit;
+  background: #E3BF6A;
+  color: #111111;
   border-radius: 2px;
   padding: 0 0.12em;
-}
-
-:root[data-theme="dark"] mark {
-  background: #5c4a2a;
-  color: #fff8ea;
 }
 
 .theme-toggle {
@@ -397,18 +398,13 @@ a.card {
   text-decoration: none;
   color: inherit;
   background: var(--bg-elev);
-  border: 1px solid #5f917a;
+  border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: var(--shadow);
 }
 
-:root[data-theme="dark"] a.card {
-  border-color: rgba(47, 168, 120, 0.72);
-  box-shadow: 0 0 0 1px rgba(47, 168, 120, 0.1), 0 0 20px rgba(47, 168, 120, 0.1);
-}
-
 a.card:hover {
-  border-color: var(--accent);
+  border-color: var(--clay);
   color: inherit;
   transform: translateY(-1px);
 }
@@ -445,12 +441,18 @@ a.card p {
 .tag-list a {
   font-family: var(--mono);
   font-size: 0.75rem;
-  color: var(--clay);
+  color: var(--pill-ink);
   background: var(--pill);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.12rem 0.5rem;
   text-decoration: none;
+}
+
+.tag-list a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
 }
 
 .tag-list {
@@ -487,7 +489,8 @@ a.card p {
 }
 
 .crumbs a {
-  text-decoration: none;
+  color: var(--link);
+  text-decoration: underline;
 }
 
 .doc-layout {
@@ -516,6 +519,12 @@ a.card p {
 .prose h3 {
   margin: 1.4rem 0 0.4rem;
   font-size: 1.2rem;
+}
+
+.prose a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
 }
 
 .prose p,
@@ -552,6 +561,7 @@ a.card p {
   display: block;
   line-height: 0;
   border-radius: 12px;
+  text-decoration: none;
 }
 
 .sheet-figure img {
@@ -625,9 +635,8 @@ div.highlighter-rouge,
   margin: 0.9rem 0 1.1rem;
   background: var(--code-bg);
   color: var(--code-fg);
-  border: 1px solid rgba(47, 168, 120, 0.72);
+  border: 1px solid #3A3A3C;
   border-radius: 10px;
-  box-shadow: 0 0 0 1px rgba(47, 168, 120, 0.12), 0 0 22px rgba(47, 168, 120, 0.14);
 }
 
 .highlighter-rouge .highlight,
@@ -662,7 +671,7 @@ div.highlighter-rouge,
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  border: 1px solid rgba(47, 168, 120, 0.45);
+  border: 1px solid rgba(242, 240, 234, 0.35);
   background: rgba(255, 255, 255, 0.08);
   color: var(--code-fg);
   border-radius: 6px;
@@ -692,7 +701,7 @@ div.language-zsh.highlighter-rouge::before {
   z-index: 1;
   top: 0.95rem;
   left: 0.85rem;
-  color: #d6b56d;
+  color: #E3BF6A;
   font-family: var(--mono);
   font-size: 0.9rem;
   font-weight: 500;
@@ -705,13 +714,13 @@ div.language-zsh.highlighter-rouge::before {
   background: rgba(255, 255, 255, 0.16);
 }
 
-/* Keywords #E2C27D, strings #A8E0C0, comments #8FB0A2, numbers #F0D38E.
+/* Keywords #E3BF6A, strings #EDE6D3, comments #9A978F, numbers #F5DFA8.
    Shell flags are Rouge .nt; they use the keyword gold so command lines read. */
 .highlight .c,
 .highlight .c1,
 .highlight .cm,
 .highlight .cs {
-  color: #8fb0a2;
+  color: #9A978F;
   font-style: italic;
 }
 
@@ -724,7 +733,7 @@ div.language-zsh.highlighter-rouge::before {
 .highlight .kt,
 .highlight .ow,
 .highlight .nt {
-  color: #e2c27d;
+  color: #E3BF6A;
 }
 
 .highlight .s,
@@ -736,7 +745,7 @@ div.language-zsh.highlighter-rouge::before {
 .highlight .sh,
 .highlight .si,
 .highlight .sx {
-  color: #a8e0c0;
+  color: #EDE6D3;
 }
 
 .highlight .m,
@@ -745,14 +754,14 @@ div.language-zsh.highlighter-rouge::before {
 .highlight .mi,
 .highlight .mo,
 .highlight .il {
-  color: #f0d38e;
+  color: #F5DFA8;
 }
 
 .highlight .nv,
 .highlight .vg,
 .highlight .vi,
 .highlight .na {
-  color: #f0d38e;
+  color: #F5DFA8;
 }
 
 .highlight .nb,
@@ -789,8 +798,9 @@ div.language-zsh.highlighter-rouge::before {
 }
 
 .toc a {
-  color: var(--muted);
-  text-decoration: none;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
 }
 
 .toc a:hover {
@@ -846,8 +856,9 @@ div.language-zsh.highlighter-rouge::before {
     order: 5;
   }
 
-  .brand-logo {
-    max-height: 36px;
+  .brand-logo,
+  .brand-logo img {
+    height: 36px;
   }
 }
 
@@ -865,7 +876,10 @@ div.language-zsh.highlighter-rouge::before {
     display: none !important;
   }
 
-  body {
+  body,
+  h1, h2, h3, h4,
+  a,
+  .prose a {
     background: white;
     color: black;
   }
@@ -877,5 +891,107 @@ div.language-zsh.highlighter-rouge::before {
 
   pre {
     white-space: pre-wrap;
+  }
+}
+
+/* Splash is black only. It does not follow the light theme or the toggle. */
+html.splash-root {
+  color-scheme: dark;
+  background: #0B0B0C;
+}
+
+html.splash-root body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0B0B0C;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  color: #F2F0EA;
+}
+
+.splash {
+  width: min(1040px, calc(100% - 2.4rem));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.35rem;
+  padding: 2.5rem 0 3rem;
+}
+
+html.splash-root h1 {
+  width: min(920px, 100%);
+  margin: 0;
+  font-size: inherit;
+  letter-spacing: 0;
+  line-height: 0;
+}
+
+.splash-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.splash-tagline {
+  margin: 0;
+  max-width: 36rem;
+  color: #ABA9A2;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.splash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+a.splash-btn,
+.splash-btn.is-disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12.5rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.35rem;
+  border: 1px solid #E3BF6A;
+  border-radius: 2px;
+  background: transparent;
+  color: #F2F0EA;
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+a.splash-btn:hover {
+  background: #E3BF6A;
+  color: #111111;
+}
+
+.splash-btn.is-disabled {
+  border-color: #2A2A2C;
+  color: #ABA9A2;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .splash {
+    width: min(1040px, calc(100% - 1.8rem));
+    gap: 1.1rem;
+  }
+
+  a.splash-btn,
+  .splash-btn.is-disabled {
+    width: min(100%, 18rem);
   }
 }
