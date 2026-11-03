@@ -47,26 +47,13 @@
     {% if page.tagline %}
       <p class="splash-tagline">{{ page.tagline | escape }}</p>
     {% endif %}
-    {% comment %}
-      Published lesson tracks, sorted by order. Linux is 1.
-      Each track offers Lessons, Labs, and Cheat Sheets.
-    {% endcomment %}
-    {% assign tracks = site.lessons | where_exp: "item", "item.parent == nil" | sort: "order" %}
-    {% if tracks.size > 0 %}
-      <nav class="splash-tracks" aria-label="Enter the site">
-        {% for track in tracks %}
-          {% assign track_name = track.short_title | default: track.title %}
-          <section class="splash-track">
-            <h2 class="splash-track-name">{{ track_name | escape }}</h2>
-            <div class="splash-actions">
-              <a class="splash-btn" href="{{ track.url | relative_url }}" aria-label="{{ track_name | escape }} lessons">Lessons</a>
-              <a class="splash-btn" href="{{ track.labs | relative_url }}" aria-label="{{ track_name | escape }} labs">Labs</a>
-              <a class="splash-btn" href="{{ track.sheets | relative_url }}" aria-label="{{ track_name | escape }} cheat sheets">Cheat Sheets</a>
-            </div>
-          </section>
-        {% endfor %}
-      </nav>
-    {% endif %}
+    <nav class="splash-tracks" aria-label="Enter the site">
+      <div class="splash-actions">
+        <a class="splash-btn" href="{{ '/lessons/' | relative_url }}">Lessons</a>
+        <a class="splash-btn" href="{{ '/labs/' | relative_url }}">Labs</a>
+        <a class="splash-btn" href="{{ '/cheatsheets/' | relative_url }}">Cheat Sheets</a>
+      </div>
+    </nav>
     {% include social.html variant="splash" %}
   </main>
 </body>
