@@ -2,10 +2,17 @@
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="{{ '/' | relative_url }}">
-      <img class="brand-logo" src="{{ '/assets/img/devopsranch-logo.png' | relative_url }}" alt="DevOps Ranch" width="925" height="176">
+      <picture class="brand-logo brand-logo-light">
+        <source type="image/webp" srcset="{{ '/assets/img/logo-black-header.webp' | relative_url }} 1x, {{ '/assets/img/logo-black-header-2x.webp' | relative_url }} 2x">
+        <img src="{{ '/assets/img/logo-black-header.png' | relative_url }}" srcset="{{ '/assets/img/logo-black-header.png' | relative_url }} 1x, {{ '/assets/img/logo-black-header-2x.png' | relative_url }} 2x" alt="DevOps Ranch" width="229" height="48">
+      </picture>
+      <picture class="brand-logo brand-logo-dark">
+        <source type="image/webp" srcset="{{ '/assets/img/logo-white-gold-header.webp' | relative_url }} 1x, {{ '/assets/img/logo-white-gold-header-2x.webp' | relative_url }} 2x">
+        <img src="{{ '/assets/img/logo-white-gold-header.png' | relative_url }}" srcset="{{ '/assets/img/logo-white-gold-header.png' | relative_url }} 1x, {{ '/assets/img/logo-white-gold-header-2x.png' | relative_url }} 2x" alt="DevOps Ranch" width="229" height="48">
+      </picture>
     </a>
     <nav class="site-nav" aria-label="Primary">
-      <a href="{{ '/' | relative_url }}" {% if page.url == "/" or page.collection == "cheatsheets" %}aria-current="page"{% endif %}>Sheets</a>
+      <a href="{{ '/cheatsheets/' | relative_url }}" {% if page.url == "/cheatsheets/" or page.collection == "cheatsheets" %}aria-current="page"{% endif %}>Sheets</a>
       <a href="{{ '/notes/' | relative_url }}" {% if page.url == "/notes/" or page.collection == "notes" %}aria-current="page"{% endif %}>Notes</a>
     </nav>
     <form class="search-form" id="search-form" role="search">
@@ -13,7 +20,7 @@
       <input id="site-search" type="search" placeholder="Search commands and notes" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-controls="search-results" aria-expanded="false" title="Search cheat sheets and notes. Press / to focus.">
       <div id="search-results" class="search-results" role="listbox" hidden></div>
     </form>
-    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Use dark theme">
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Use light theme" aria-pressed="true">
       <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
         <path fill="currentColor" d="M14.5 2.5a8.8 8.8 0 1 0 7 12.2A7.2 7.2 0 0 1 14.5 2.5z"/>
       </svg>

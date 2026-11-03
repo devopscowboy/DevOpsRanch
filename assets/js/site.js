@@ -335,17 +335,23 @@
     toc.hidden = false;
   }
 
+  function isDarkTheme() {
+    return document.documentElement.getAttribute("data-theme") !== "light";
+  }
+
   function syncThemeButton() {
     if (!toggle) return;
-    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    var dark = isDarkTheme();
     toggle.setAttribute("aria-label", dark ? "Use light theme" : "Use dark theme");
     toggle.setAttribute("aria-pressed", dark ? "true" : "false");
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", dark ? "#0B0B0C" : "#FFFFFF");
   }
 
   if (toggle) {
     syncThemeButton();
     toggle.addEventListener("click", function () {
-      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      var next = isDarkTheme() ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
       try { localStorage.setItem("theme", next); } catch (err) {}
       syncThemeButton();

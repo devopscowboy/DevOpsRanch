@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="splash-root" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% assign summary = page.description | default: site.description %}
+  <title>{{ site.title | escape }}</title>
+  <meta name="description" content="{{ summary | strip | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <meta property="og:title" content="{{ site.title | escape }}">
+  <meta property="og:description" content="{{ summary | strip | escape }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta name="theme-color" content="#0B0B0C">
+  {% include icons.html %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <main id="content" class="splash">
+    <h1>
+      <script>
+        (function () {
+          var friday = new Date().getDay() === 5;
+          var png = friday
+            ? {{ '/assets/img/logo-all-gold.png' | relative_url | jsonify }}
+            : {{ '/assets/img/logo-white-gold.png' | relative_url | jsonify }};
+          var srcset = friday
+            ? {{ '/assets/img/logo-all-gold.webp' | relative_url | jsonify }} + " 960w, " + {{ '/assets/img/logo-all-gold-2x.webp' | relative_url | jsonify }} + " 1920w"
+            : {{ '/assets/img/logo-white-gold.webp' | relative_url | jsonify }} + " 960w, " + {{ '/assets/img/logo-white-gold-2x.webp' | relative_url | jsonify }} + " 1920w";
+          document.write(
+            '<img class="splash-logo" alt="DevOps Ranch" width="960" height="201" sizes="(max-width: 720px) 92vw, 880px" fetchpriority="high" src="' +
+            png + '" srcset="' + srcset + '">'
+          );
+        })();
+      </script>
+      <noscript>
+        <picture>
+          <source type="image/webp" srcset="{{ '/assets/img/logo-white-gold.webp' | relative_url }} 960w, {{ '/assets/img/logo-white-gold-2x.webp' | relative_url }} 1920w" sizes="(max-width: 720px) 92vw, 880px">
+          <img class="splash-logo" src="{{ '/assets/img/logo-white-gold.png' | relative_url }}" alt="DevOps Ranch" width="960" height="201">
+        </picture>
+      </noscript>
+    </h1>
+    {% if page.tagline %}
+      <p class="splash-tagline">{{ page.tagline | escape }}</p>
+    {% endif %}
+    {% comment %}
+      page.actions is the front door. Add Labs later as another entry.
+      Set disabled: true for a non-link "Coming soon" control.
+    {% endcomment %}
+    {% if page.actions.size > 0 %}
+      <nav class="splash-actions" aria-label="Enter the site">
+        {% for action in page.actions %}
+          {% if action.disabled %}
+            <button type="button" class="splash-btn is-disabled" disabled>{{ action.label | escape }}{% if action.note %} <span class="splash-soon">{{ action.note | escape }}</span>{% endif %}</button>
+          {% else %}
+            <a class="splash-btn" href="{{ action.href | relative_url }}">{{ action.label | escape }}</a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+    {% endif %}
+  </main>
+</body>
+</html>
