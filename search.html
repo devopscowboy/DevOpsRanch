@@ -4,6 +4,8 @@ permalink: /search.json
 ---
 [
 {%- assign sheets = site.cheatsheets | sort: "title" -%}
+{%- assign lessons = site.lessons | sort: "order" -%}
+{%- assign labs = site.labs | sort: "order" -%}
 {%- assign notes = site.notes | sort: "title" -%}
 {%- assign first_item = true -%}
 {%- for sheet in sheets -%}
@@ -19,6 +21,26 @@ permalink: /search.json
 {%- endfor -%}
 {%- endif -%}
 {"kind":{{ kind | jsonify }},"title":{{ sheet.title | jsonify }},"description":{{ sheet.description | default: "" | jsonify }},"tags":{{ sheet.tags | jsonify }},"url":{{ sheet.url | relative_url | jsonify }},"text":{{ sheet.content | strip_html | normalize_whitespace | jsonify }}}
+{%- endfor -%}
+{%- for lesson in lessons -%}
+{%- unless first_item -%},{%- endunless -%}
+{%- assign first_item = false -%}
+{%- if lesson.parent -%}
+{%- assign kind = "Lesson" -%}
+{%- else -%}
+{%- assign kind = "Lessons" -%}
+{%- endif -%}
+{"kind":{{ kind | jsonify }},"title":{{ lesson.title | jsonify }},"description":{{ lesson.description | default: "" | jsonify }},"tags":{{ lesson.tags | jsonify }},"url":{{ lesson.url | relative_url | jsonify }},"text":{{ lesson.content | strip_html | normalize_whitespace | jsonify }}}
+{%- endfor -%}
+{%- for lab in labs -%}
+{%- unless first_item -%},{%- endunless -%}
+{%- assign first_item = false -%}
+{%- if lab.parent -%}
+{%- assign kind = "Lab" -%}
+{%- else -%}
+{%- assign kind = "Labs" -%}
+{%- endif -%}
+{"kind":{{ kind | jsonify }},"title":{{ lab.title | jsonify }},"description":{{ lab.description | default: "" | jsonify }},"tags":{{ lab.tags | jsonify }},"url":{{ lab.url | relative_url | jsonify }},"text":{{ lab.content | strip_html | normalize_whitespace | jsonify }}}
 {%- endfor -%}
 {%- for note in notes -%}
 {%- unless first_item -%},{%- endunless -%}

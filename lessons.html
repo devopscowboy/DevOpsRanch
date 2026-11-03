@@ -1,0 +1,24 @@
+---
+layout: default
+title: Lessons
+permalink: /lessons/
+description: Linux lessons for the RHCSA, in order.
+---
+{% assign tracks = site.lessons | where_exp: "item", "item.parent == nil" | sort: "order" %}
+
+<header class="doc-header">
+  {% include crumbs.html %}
+  <p class="kicker">Learn</p>
+  <h1>Lessons</h1>
+  <p class="lede">Tracks in foundation order. Linux is first. Open a track to see its modules and lessons.</p>
+</header>
+
+{% if tracks.size == 0 %}
+  <p class="empty-state">No lessons yet.</p>
+{% else %}
+  <div class="cards">
+    {% for track in tracks %}
+      {% include card.html item=track %}
+    {% endfor %}
+  </div>
+{% endif %}

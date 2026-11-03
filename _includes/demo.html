@@ -1,0 +1,49 @@
+{% comment %}
+  Lab walkthrough media. Omit src until the file exists.
+
+  Placeholder:
+    {% include demo.html %}
+
+  Video (autoplay, muted, loop, playsinline) or GIF:
+    {% include demo.html src="/assets/demos/filesystem.mp4" alt="Short description" %}
+    {% include demo.html src="/assets/demos/filesystem.gif" alt="Short description" caption="Optional caption" %}
+
+  src is a site path. mp4 and webm render as video. gif renders as an image.
+  Anything else is left as a placeholder so a typo cannot 404 the lab.
+{% endcomment %}
+{% assign demo_src = include.src | default: "" | strip %}
+{% assign demo_alt = include.alt | default: "Lab walkthrough" | strip %}
+{% assign demo_caption = include.caption | default: "" | strip %}
+{% assign demo_kind = "" %}
+{% if demo_src != "" %}
+  {% assign demo_lower = demo_src | downcase %}
+  {% if demo_lower contains ".gif" %}
+    {% assign demo_kind = "gif" %}
+  {% elsif demo_lower contains ".mp4" or demo_lower contains ".webm" %}
+    {% assign demo_kind = "video" %}
+  {% endif %}
+{% endif %}
+<figure class="demo">
+  {% if demo_kind == "gif" %}
+    <img src="{{ demo_src | relative_url }}" alt="{{ demo_alt | escape }}" loading="lazy" decoding="async">
+  {% elsif demo_kind == "video" %}
+    {% if demo_lower contains ".webm" %}
+      {% assign demo_type = "video/webm" %}
+    {% else %}
+      {% assign demo_type = "video/mp4" %}
+    {% endif %}
+    <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" aria-label="{{ demo_alt | escape }}">
+      <source src="{{ demo_src | relative_url }}" type="{{ demo_type }}">
+    </video>
+  {% else %}
+    <div class="demo-placeholder" role="img" aria-label="Walkthrough coming soon">
+      <span class="demo-placeholder-kicker">Walkthrough</span>
+      <span class="demo-placeholder-title">Coming soon</span>
+    </div>
+  {% endif %}
+  {% if demo_caption != "" %}
+    <figcaption>{{ demo_caption | escape }}</figcaption>
+  {% elsif demo_kind == "" %}
+    <figcaption>A short loop of this exercise will be here.</figcaption>
+  {% endif %}
+</figure>

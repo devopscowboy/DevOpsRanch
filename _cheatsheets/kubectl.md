@@ -4,6 +4,8 @@ description: Contexts, workloads, logs, rollouts, and the debug commands that do
 tags:
   - Kubernetes
   - kubectl
+order: 5
+published: false
 ---
 
 Most commands take `-n namespace`. `-A` on `kubectl get` is every namespace. Set a default so you stop typing it:

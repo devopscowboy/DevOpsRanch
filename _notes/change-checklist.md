@@ -3,6 +3,7 @@ title: Change checklist
 description: What to confirm before, during, and after a production change.
 tags:
   - notes
+published: false
 ---
 
 This is a note, not a cheat sheet. The sheets are the commands. This is the order to use them in when something in production is about to change.

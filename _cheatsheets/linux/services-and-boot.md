@@ -5,7 +5,7 @@ tags:
   - Linux
   - Bash
   - RHCSA
-updated: 2026-11-02
+updated: 2026-11-03
 section: linux
 parent: linux
 order: 8
@@ -29,13 +29,11 @@ journalctl -u nginx -f
 
 `systemctl edit nginx` writes a drop-in under `/etc/systemd/system/nginx.service.d/` and runs `daemon-reload` for you. A unit file you edited by hand still needs `sudo systemctl daemon-reload` before a restart will see it. `status` shows whether the unit is running and the last few log lines. `journalctl -u` is the full log for that unit. `--no-pager` matters in scripts, where an interactive pager would hang.
 
-`enable --now` is the combined form. RHEL 7's System Administrator's Guide shows start and enable as two commands. `service` and `chkconfig` are the RHEL 6 wrappers. RHEL 7 still ships them, and they call systemctl. Prefer `systemctl` on RHEL 7, 8, and 9.
+`enable --now` is the combined form. RHEL 7's System Administrator's Guide shows start and enable as two commands. Prefer `systemctl` on RHEL 7, 8, 9, and 10.
 
 ```bash
 sudo systemctl start nginx
 sudo systemctl enable nginx
-service nginx status
-sudo chkconfig nginx on
 ```
 
 ## Boot targets and recovery

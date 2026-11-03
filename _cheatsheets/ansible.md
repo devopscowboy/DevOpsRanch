@@ -6,6 +6,8 @@ tags:
   - Automation
   - RHCE
 updated: 2026-10-30
+order: 3
+published: false
 ---
 
 EX294 on RHEL 9 is Ansible automation of the RHCSA tasks: packages, services, firewalld, filesystems, users, and scheduled jobs. Run playbooks with `ansible-navigator` and with `ansible-playbook`. Use fully qualified module names (`ansible.builtin.copy`). The Linux commands those modules replace are on the [Linux sheet](/cheatsheets/linux/). Clone and commit, which the exam also asks for, are on the [Git sheet](/cheatsheets/git/).

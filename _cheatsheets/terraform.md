@@ -3,6 +3,8 @@ title: Terraform
 description: Format, plan, state, import, and the S3 backend settings that keep apply from stepping on itself.
 tags:
   - Terraform
+order: 7
+published: false
 ---
 
 Commands are Terraform 1.5 or newer unless a section says otherwise. Run them from the directory that contains the `.tf` files, or pass `-chdir`.

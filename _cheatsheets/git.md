@@ -3,6 +3,8 @@ title: Git
 description: Status, commits, branches, history, and the safe ways to undo work.
 tags:
   - Git
+order: 2
+published: false
 ---
 
 Commands assume Git 2.23 or newer, so `git switch` and `git restore` are available. `git checkout` still works if that is what your fingers know.

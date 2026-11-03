@@ -9,18 +9,53 @@
     {%- assign crumb_total = crumb_total | plus: 1 -%}
   {%- endif -%}
 {%- endfor -%}
-<nav class="crumbs" aria-label="Breadcrumb">
-  <ol class="crumb-line">
-    <li class="crumb-slot"><a class="crumb crumb-root" href="{{ '/' | relative_url }}" title="cd /" aria-label="Home">/</a></li>
-    {%- assign crumb_seen = 0 -%}
-    {%- assign crumb_path = "" -%}
-    {%- for seg in crumb_segs -%}
-      {%- assign seg_clean = seg | strip -%}
-      {%- if seg_clean != "" -%}
-        {%- assign crumb_seen = crumb_seen | plus: 1 -%}
-        {%- assign crumb_path = crumb_path | append: "/" | append: seg_clean -%}
-        <li class="crumb-slot">{%- if crumb_seen == crumb_total -%}<span class="crumb crumb-here" aria-current="page">{{ seg_clean | escape }}</span><span class="crumb-sep" aria-hidden="true">/</span>{%- else -%}<a class="crumb" href="{{ crumb_path | append: '/' | relative_url }}">{{ seg_clean | escape }}</a><span class="crumb-sep" aria-hidden="true">/</span>{%- endif -%}</li>
-      {%- endif -%}
-    {%- endfor -%}
-  </ol>
-</nav>
+{%- assign show_path_info = false -%}
+{%- if page.url contains "/linux/" -%}
+  {%- assign show_path_info = true -%}
+{%- endif -%}
+<div class="crumbs">
+  <nav aria-label="Breadcrumb">
+    <ol class="crumb-line">
+      <li class="crumb-slot"><a class="crumb crumb-root" href="{{ '/' | relative_url }}" title="cd /" aria-label="Home">/</a></li>
+      {%- assign crumb_seen = 0 -%}
+      {%- assign crumb_path = "" -%}
+      {%- for seg in crumb_segs -%}
+        {%- assign seg_clean = seg | strip -%}
+        {%- if seg_clean != "" -%}
+          {%- assign crumb_seen = crumb_seen | plus: 1 -%}
+          {%- assign crumb_path = crumb_path | append: "/" | append: seg_clean -%}
+          <li class="crumb-slot">{%- if crumb_seen == crumb_total -%}<span class="crumb crumb-here" aria-current="page">{{ seg_clean | escape }}</span><span class="crumb-sep" aria-hidden="true">/</span>{%- else -%}<a class="crumb" href="{{ crumb_path | append: '/' | relative_url }}">{{ seg_clean | escape }}</a><span class="crumb-sep" aria-hidden="true">/</span>{%- endif -%}</li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ol>
+  </nav>
+  {%- if show_path_info -%}
+    <button type="button" class="path-info" id="path-info" aria-haspopup="dialog" aria-controls="path-dialog" aria-expanded="false" aria-label="What an absolute path is">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <path fill="currentColor" d="M11 10.2h2V17h-2zM11 7h2v2h-2z"/>
+      </svg>
+    </button>
+    <div class="path-dialog" id="path-dialog" role="dialog" aria-modal="true" aria-labelledby="path-dialog-title" hidden>
+      <div class="path-dialog-backdrop" data-close></div>
+      <div class="path-dialog-panel">
+        <div class="path-dialog-head">
+          <h2 id="path-dialog-title">Absolute paths</h2>
+          <button type="button" class="path-dialog-close" data-close>Close</button>
+        </div>
+        <figure class="sheet-figure">
+          <a href="{{ '/assets/img/linux-directory-tree.png' | relative_url }}">
+            <picture>
+              <source srcset="{{ '/assets/img/linux-directory-tree.webp' | relative_url }}" type="image/webp">
+              <img src="{{ '/assets/img/linux-directory-tree.png' | relative_url }}" alt="Linux directory tree rooted at /, labeled root. Under home/devopscowboy are projects, plus etc/hosts and var/log/app.log. The Full Paths panel lists each absolute path, including /home/devopscowboy/projects/ansible-lab/playbooks/site.yml." width="1536" height="1024" decoding="async">
+            </picture>
+          </a>
+          <figcaption>Every absolute path in the tree starts with /, the root.</figcaption>
+        </figure>
+        <p>An absolute path starts with <code>/</code>. That slash is the root, the top of the filesystem, and the path lists every directory from there down to the file. It names the same place no matter which directory you are in.</p>
+        <p>A relative path has no leading <code>/</code>. It starts from the directory you are in now, the one <code>pwd</code> prints.</p>
+        <p class="path-dialog-action"><a class="cd-up" href="{{ '/lessons/linux/filesystem/' | relative_url }}">Read the full lesson</a></p>
+      </div>
+    </div>
+  {%- endif -%}
+</div>

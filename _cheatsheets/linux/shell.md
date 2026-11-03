@@ -1,72 +1,51 @@
 ---
 title: Shell
-description: Quoting, exit status, and the bash habits that keep a script from deleting the wrong path.
+description: Arguments, tests, redirection, and the exit status of a short RHEL script.
 tags:
   - Linux
   - Bash
   - RHCSA
-updated: 2026-11-02
+updated: 2026-11-03
 section: linux
 parent: linux
 order: 12
 ---
 
-## Shell habits
+## Arguments, tests, and redirection
+
+These are the pieces a short RHEL script actually uses. Quoting, a test, and where the output goes.
 
 ```bash
-set -euo pipefail
-```
-
-In a script, `-e` exits on a failed command, `-u` errors on an unset variable, and `pipefail` makes a pipeline fail when any stage fails. `-e` does not fire inside an `if` test, which is what you want.
-
-```bash
-printf 'count %s\n' "$#"
 printf 'first %s\n' "$1"
+printf 'count %s\n' "$#"
 printf 'arg %s\n' "$@"
+```
+
+`"$1"` is the first argument. `"$#"` is how many arguments there were. `"$@"` is every argument, each as its own word. The quotes matter when an argument contains a space.
+
+```bash
 [[ -d /path ]]
+[[ -f /path ]]
 [[ -n "${1:-}" ]]
-out=$(cmd)
-while IFS= read -r line; do
-  printf '%s\n' "$line"
-done < file
-tmp=$(mktemp)
-trap 'rm -f "$tmp"' EXIT
+name=$(whoami)
 ```
 
-`"$#"` is how many arguments you got, `"$1"` is the first, and `"$@"` is every argument as its own word. Quoting matters once an argument contains a space. `[[ -d /path ]]` is the test for a directory. `$(cmd)` captures stdout and strips trailing newlines.
-
-```bash
-SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-```
-
-That is the directory the script lives in, which is not the same as the directory you launched it from.
-
-```bash
-while getopts "hv" opt; do
-  case "$opt" in
-    h) printf 'usage: %s [-h] [-v]\n' "$0"; exit 0 ;;
-    v) verbose=1 ;;
-    *) exit 1 ;;
-  esac
-done
-shift $((OPTIND - 1))
-```
-
-`getopts` is the short-option parser. After the loop, `shift` drops the options so `"$@"` is the remaining operands.
+`[[ -d ]]` is true when the path is a directory. `[[ -f ]]` is true when it is a regular file. `$(whoami)` runs the command and keeps what it printed. `${1:-}` is an empty string when `$1` was not set.
 
 ```bash
 cmd > out.txt
 cmd >> out.txt
 cmd 2> err.txt
 cmd > all.txt 2>&1
-cmd | tee all.txt
-echo $?
+printf '%s\n' "$?"
 ```
 
-`$?` is the exit status of the last command. `0` is success. `2>&1` sends stderr to wherever stdout is going, and the order is the meaning: `> all.txt 2>&1` sends both to the file. `tee` copies stdout to a file and to the screen.
+`>` writes standard output to a file and replaces that file. `>>` appends. `2>` is standard error. `2>&1` sends standard error to the same place as standard output, and it has to come after the `>` that sets that place. `$?` is the exit status of the last command. `0` means it worked.
 
 ```bash
-export AWS_PROFILE=dev
+set -euo pipefail
 ```
 
-On macOS, in-place `sed` needs a backup suffix argument, and an empty suffix still has to be present: `sed -i '' 's/foo/bar/' file`. GNU sed on Linux accepts `sed -i 's/foo/bar/' file`.
+At the top of a script, `-e` exits when a command fails, `-u` errors when a variable is unset, and `pipefail` makes a pipeline fail if any stage fails. `-e` does not fire inside an `if` test.
+
+On RHEL 7, 8, 9, and 10, `sed` is GNU sed. `sed -i 's/old/new/' file` edits the file in place. `sed -i.bak` keeps a copy named `file.bak`.

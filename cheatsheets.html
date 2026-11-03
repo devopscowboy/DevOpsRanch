@@ -2,9 +2,9 @@
 layout: default
 title: Cheat sheets
 permalink: /cheatsheets/
-description: Commands worth keeping, with search and tag filters.
+description: Commands worth keeping. Linux is first.
 ---
-{% assign sheets = site.cheatsheets | where_exp: "item", "item.parent == nil" | sort: "title" %}
+{% assign sheets = site.cheatsheets | where_exp: "item", "item.parent == nil" | sort: "order" %}
 {% capture tag_blob %}{% for sheet in sheets %}{% for tag in sheet.tags %}{{ tag }}|{% endfor %}{% endfor %}{% endcapture %}
 {% assign all_tags = tag_blob | split: "|" | uniq | sort %}
 
@@ -12,7 +12,7 @@ description: Commands worth keeping, with search and tag filters.
   {% include crumbs.html %}
   <p class="kicker">Reference</p>
   <h1>Cheat sheets</h1>
-  <p class="lede">Commands worth keeping, grouped by the work they belong to.</p>
+  <p class="lede">Commands worth keeping. Linux is the foundation, and it stays first.</p>
   <p class="meta">{{ sheets.size }} cheat sheets</p>
 </header>
 
@@ -28,21 +28,8 @@ description: Commands worth keeping, with search and tag filters.
   </div>
 
   <div id="card-grid" class="cards">
-    {% for tag in all_tags %}
-      {% assign tag_clean = tag | strip %}
-      {% if tag_clean != "" %}
-        {% for sheet in sheets %}
-          {% assign primary = sheet.tags | first %}
-          {% if primary == tag_clean %}
-            {% include card.html item=sheet %}
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
     {% for sheet in sheets %}
-      {% if sheet.tags.size == 0 %}
-        {% include card.html item=sheet %}
-      {% endif %}
+      {% include card.html item=sheet %}
     {% endfor %}
   </div>
   <p id="empty-state" class="empty-state" hidden>No cheat sheets match that filter.</p>

@@ -1,0 +1,51 @@
+{% assign track = site.data[page.section] %}
+{% if page.collection == "labs" %}
+  {% assign pool = site.labs %}
+{% else %}
+  {% assign pool = site.lessons %}
+{% endif %}
+{% if track.modules %}
+  {% assign n = 0 %}
+  {% for module in track.modules %}
+    {% assign module_id = module.title | downcase | replace: "&", "and" | replace: " ", "-" %}
+    <section class="module" id="{{ module_id | escape }}" aria-labelledby="module-{{ module_id | escape }}">
+      <h2 id="module-{{ module_id | escape }}">{{ module.title | escape }}</h2>
+      {% if module.summary %}
+        <p class="module-summary">{{ module.summary | escape }}</p>
+      {% endif %}
+      <ol class="outline">
+        {% for lesson in module.lessons %}
+          {% assign n = n | plus: 1 %}
+          {% if n < 10 %}
+            {% assign num = n | prepend: "0" %}
+          {% else %}
+            {% assign num = n %}
+          {% endif %}
+          {% assign hit = pool | where: "slug", lesson.slug | first %}
+          <li class="outline-item{% unless hit %} is-soon{% endunless %}">
+            {% if hit %}
+              <a href="{{ hit.url | relative_url }}">
+            {% else %}
+              <div class="outline-row">
+            {% endif %}
+              <span class="outline-num">{{ num }}</span>
+              <span class="outline-body">
+                <span class="outline-title">{{ lesson.title | escape }}</span>
+                {% if lesson.objective %}
+                  <span class="outline-objective">{{ lesson.objective | escape }}</span>
+                {% endif %}
+              </span>
+              {% unless hit %}
+                <span class="outline-soon">Coming soon</span>
+              {% endunless %}
+            {% if hit %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% endfor %}
+{% endif %}

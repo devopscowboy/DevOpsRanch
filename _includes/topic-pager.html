@@ -1,7 +1,8 @@
+{% assign sequence = include.sequence | default: site.cheatsheets %}
 {% if page.parent %}
-  {% assign topics = site.cheatsheets | where: "parent", page.parent | sort: "order" %}
+  {% assign topics = sequence | where: "parent", page.parent | sort: "order" %}
   {% assign section_home = nil %}
-  {% assign family = site.cheatsheets | where: "section", page.parent %}
+  {% assign family = sequence | where: "section", page.parent %}
   {% for item in family %}
     {% unless item.parent %}
       {% assign section_home = item %}

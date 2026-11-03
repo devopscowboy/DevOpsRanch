@@ -5,15 +5,13 @@ tags:
   - Linux
   - Bash
   - RHCSA
-updated: 2026-11-02
+updated: 2026-11-03
 section: linux
 parent: linux
 order: 3
 ---
 
 ## Users, groups, and sudo
-
-Creating the account is `useradd`. The same change as a playbook task is `ansible.builtin.user` on the [Ansible sheet](/cheatsheets/ansible/).
 
 ```bash
 sudo useradd -m -s /bin/bash alice
@@ -39,19 +37,14 @@ A drop-in under `/etc/sudoers.d` beats editing `/etc/sudoers`. `visudo -c -f` pa
 
 > `usermod -G devs alice` without `-a` removes alice from every other supplementary group, including `wheel`. sudo ignores files in `/etc/sudoers.d` whose names contain a `.` or end in `~`.
 
-## SSH keys, tunnels, and file transfer
+## SSH keys and file transfer
 
 ```bash
 ssh-keygen -t ed25519 -C 'devopscowboy@laptop'
 ssh-copy-id alice@web01
-ssh -J bastion alice@10.0.1.20
-ssh -N -L 8443:localhost:443 alice@web01
 scp app.tar.gz alice@web01:/tmp/
-rsync -avz --progress site/ alice@web01:/var/www/site/
 ```
 
-`ssh-keygen -t ed25519` writes `~/.ssh/id_ed25519` and the `.pub` file. `ssh-copy-id` appends the public key to `authorized_keys` on the host. `-J bastion` is `ProxyJump`: the connection goes through that host first. `-L 8443:localhost:443` opens port 8443 on your machine and forwards it to port 443 on the SSH server. `localhost` in that option is resolved on the server. `-N` does not start a remote shell, which is what you want for a tunnel you leave running.
-
-`scp` copies one file. `rsync -a` preserves permissions and times, `-z` compresses, and `--progress` shows each file. The trailing slash on `site/` copies the contents of the directory. Without it, rsync copies the directory itself and you get `/var/www/site/site/`.
+`ssh-keygen -t ed25519` writes `~/.ssh/id_ed25519` and the `.pub` file. `ssh-copy-id` appends the public key to `authorized_keys` on the host. `scp` copies one file. The path after the colon is where the file lands on the other host.
 
 > sshd refuses the key when `~/.ssh` is not mode `700`, `authorized_keys` is not mode `600`, or the home directory is writable by the group. `StrictModes` checks all three.

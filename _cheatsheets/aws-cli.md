@@ -3,6 +3,8 @@ title: AWS CLI
 description: Profiles, identity, S3, EC2, logs, EKS, ECR, CloudFormation, and Parameter Store.
 tags:
   - AWS
+order: 8
+published: false
 ---
 
 These commands are AWS CLI v2. v1 is missing several of them, including `aws logs tail`.

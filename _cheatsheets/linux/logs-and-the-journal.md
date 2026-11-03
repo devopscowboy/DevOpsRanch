@@ -5,7 +5,7 @@ tags:
   - Linux
   - Bash
   - RHCSA
-updated: 2026-11-02
+updated: 2026-11-03
 section: linux
 parent: linux
 order: 11
@@ -32,4 +32,4 @@ sudo systemctl restart systemd-journald
 
 The default `Storage=auto` in `/etc/systemd/journald.conf` keeps the journal under `/run/log/journal`, which is gone after reboot, unless `/var/log/journal` exists. Creating that directory and restarting `systemd-journald` makes `auto` persist. Setting `Storage=persistent` in the config file does the same thing even if someone later removes the directory. Confirm with `journalctl -b -1` after the next reboot.
 
-> A host that has never had `/var/log/journal` loses this boot's journal on the next reboot. `tail -f /var/log/secure` is the text copy of SSH and sudo on RHEL. Debian writes that stream to `/var/log/auth.log`.
+> A host that has never had `/var/log/journal` loses this boot's journal on the next reboot. `tail -f /var/log/secure` is the text copy of SSH and sudo on RHEL.

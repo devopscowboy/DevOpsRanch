@@ -1,0 +1,27 @@
+---
+layout: default
+---
+<article class="doc">
+  {% include crumbs.html %}
+  <header class="doc-header">
+    <p class="kicker">{% if page.collection == "labs" %}Labs{% else %}Lessons{% endif %}</p>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.description %}
+      <p class="lede">{{ page.description | escape }}</p>
+    {% endif %}
+    {% if page.tags.size > 0 %}
+      <ul class="tag-list">
+        {% for tag in page.tags %}
+          <li>{{ tag | escape }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </header>
+  {% include doc-toc.html %}
+  <div class="doc-main">
+    <div class="prose">
+      {{ content }}
+      {% include track-outline.html %}
+    </div>
+  </div>
+</article>
