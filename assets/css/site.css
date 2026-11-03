@@ -1143,6 +1143,65 @@ a.cd-up:focus-visible {
   margin: 0;
 }
 
+.social {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+}
+
+.social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 8px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.social svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Gold is the hover and focus accent. #E3BF6A fails 3:1 on white,
+   so light mode uses a darker gold that still clears the non-text bar. */
+.social a:hover,
+.social a:focus-visible {
+  color: #E3BF6A;
+}
+
+:root[data-theme="light"] .social a:hover,
+:root[data-theme="light"] .social a:focus-visible {
+  color: #A07F2C;
+  outline-color: #A07F2C;
+}
+
+.social-splash {
+  margin-top: -0.35rem;
+}
+
+.social-splash a {
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #F2F0EA;
+}
+
+.social-splash svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.social-splash a:hover,
+.social-splash a:focus-visible {
+  color: #E3BF6A;
+  outline-color: #E3BF6A;
+}
+
 @media (min-width: 861px) {
   .toc-drawer {
     display: none !important;
@@ -1212,6 +1271,7 @@ a.cd-up:focus-visible {
 @media print {
   .site-header,
   .site-footer,
+  .social,
   .toc,
   .toc-drawer,
   .copy-btn,
