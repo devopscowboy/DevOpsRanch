@@ -1,0 +1,50 @@
+{% if page.parent %}
+  {% assign topics = site.cheatsheets | where: "parent", page.parent | sort: "order" %}
+  {% assign section_home = nil %}
+  {% assign family = site.cheatsheets | where: "section", page.parent %}
+  {% for item in family %}
+    {% unless item.parent %}
+      {% assign section_home = item %}
+    {% endunless %}
+  {% endfor %}
+  {% assign prev_topic = nil %}
+  {% assign next_topic = nil %}
+  {% assign found_topic = false %}
+  {% for topic in topics %}
+    {% if topic.url == page.url %}
+      {% assign found_topic = true %}
+    {% elsif found_topic %}
+      {% unless next_topic %}
+        {% assign next_topic = topic %}
+      {% endunless %}
+    {% else %}
+      {% assign prev_topic = topic %}
+    {% endif %}
+  {% endfor %}
+  {% if section_home.short_title %}
+    {% assign back_name = section_home.short_title %}
+  {% else %}
+    {% assign back_name = section_home.title %}
+  {% endif %}
+  <nav class="topic-nav" aria-label="Topics">
+    <div class="topic-nav-prev">
+      {% if prev_topic %}
+        <a class="topic-jump" rel="prev" href="{{ prev_topic.url | relative_url }}">
+          <span class="topic-jump-kicker">Previous</span>
+          <span class="topic-jump-title">{{ prev_topic.title | escape }}</span>
+        </a>
+      {% endif %}
+    </div>
+    {% if section_home %}
+      <a class="cd-up" href="{{ section_home.url | relative_url }}" aria-label="Back to {{ back_name | escape }}">cd ..</a>
+    {% endif %}
+    <div class="topic-nav-next">
+      {% if next_topic %}
+        <a class="topic-jump" rel="next" href="{{ next_topic.url | relative_url }}">
+          <span class="topic-jump-kicker">Next</span>
+          <span class="topic-jump-title">{{ next_topic.title | escape }}</span>
+        </a>
+      {% endif %}
+    </div>
+  </nav>
+{% endif %}

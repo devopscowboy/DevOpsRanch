@@ -7,6 +7,7 @@ description: Longer notes that sit beside the cheat sheets.
 {% assign notes = site.notes | sort: "title" %}
 
 <header class="doc-header">
+  {% include crumbs.html %}
   <p class="kicker">Notebook</p>
   <h1>Notes</h1>
   <p class="lede">Write-ups, checklists, and anything that is not a command sheet. Each Markdown file in the notes folder is a page.</p>

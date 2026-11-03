@@ -28,6 +28,7 @@
   --shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
   --grid-line: rgba(255, 255, 255, 0.045);
   --grid-size: 48px;
+  --header-sticky: 5.25rem;
   --sans: "IBM Plex Sans", "Segoe UI", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
@@ -516,27 +517,128 @@ a.card p {
 }
 
 .doc-header {
-  padding: 1.8rem 0 0.4rem;
+  grid-area: header;
+  padding: 1.55rem 0 0.2rem;
   max-width: 44rem;
 }
 
-.crumbs {
-  margin: 0 0 0.7rem;
-  color: var(--muted);
-  font-size: 0.92rem;
+article.doc > .doc-header {
+  padding-top: 0.7rem;
 }
 
-.crumbs a {
+.crumbs {
+  grid-area: crumbs;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 0 0.75rem;
+}
+
+article.doc > .crumbs {
+  margin: 1.35rem 0 0;
+}
+
+.crumb-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.crumb-slot {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.2rem;
+  border-radius: 4px;
+  color: var(--ink);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+a.crumb {
   color: var(--link);
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
 
-.doc-layout {
+a.crumb:hover,
+a.crumb:focus-visible {
+  background: var(--pill);
+  color: var(--link-hover);
+}
+
+a.crumb-root {
+  /* Extra padding is the hit target. The negative margin keeps the
+     slash sitting in the path instead of opening a gap. */
+  min-width: 2.75rem;
+  justify-content: center;
+  padding-inline: 0.7rem;
+  margin-inline: -0.45rem;
+  text-decoration: none;
+}
+
+a.crumb-root:hover,
+a.crumb-root:focus-visible {
+  background: var(--pill);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--ink);
+  text-underline-offset: 0.18em;
+}
+
+.crumb-here {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: default;
+}
+
+.crumb-sep {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.doc {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 13.5rem;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "crumbs"
+    "header"
+    "body";
   align-items: start;
-  margin-top: 1.2rem;
+  column-gap: 2.4rem;
+}
+
+.doc.has-toc {
+  grid-template-columns: minmax(0, 1fr) 14.25rem;
+  grid-template-areas:
+    "crumbs crumbs"
+    "header toc"
+    "body toc";
+}
+
+.doc-main {
+  grid-area: body;
+  min-width: 0;
+  margin-top: 0.35rem;
 }
 
 .prose {
@@ -552,11 +654,18 @@ a.card p {
   margin: 2rem 0 0.55rem;
   font-size: 1.5rem;
   padding-top: 0.35rem;
+  scroll-margin-top: 6rem;
 }
 
 .prose h3 {
   margin: 1.4rem 0 0.4rem;
   font-size: 1.2rem;
+  scroll-margin-top: 6rem;
+}
+
+.section-topics {
+  margin: 1.7rem 0 0.85rem;
+  font-size: 1.35rem;
 }
 
 .prose a {
@@ -817,10 +926,37 @@ div.language-zsh.highlighter-rouge::before {
   color: var(--code-fg);
 }
 
-.toc {
-  position: sticky;
-  top: 5.2rem;
+.toc,
+.toc-drawer {
   font-size: 0.9rem;
+}
+
+.toc {
+  display: none;
+}
+
+.doc.has-toc .toc:not([hidden]) {
+  display: block;
+  grid-area: toc;
+  position: sticky;
+  top: var(--header-sticky);
+  align-self: start;
+  width: 100%;
+  min-width: 0;
+  max-height: calc(100vh - var(--header-sticky) - 1.5rem);
+  margin-top: 0;
+  padding-top: 0.7rem;
+  padding-bottom: 1rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.toc[hidden],
+.toc-drawer[hidden] {
+  display: none !important;
 }
 
 .toc-label {
@@ -833,27 +969,159 @@ div.language-zsh.highlighter-rouge::before {
   color: var(--muted);
 }
 
-.toc ol {
+.toc ol,
+.toc-drawer ol {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.toc li {
+.toc li,
+.toc-drawer li {
   margin: 0.28rem 0;
 }
 
-.toc a {
+.toc a,
+.toc-drawer a {
+  display: inline-block;
+  padding: 0.15rem 0.15rem;
   color: var(--link);
   text-decoration: underline;
   text-underline-offset: 0.14em;
+  overflow-wrap: anywhere;
 }
 
-.toc a:hover {
+.toc a:hover,
+.toc-drawer a:hover {
+  color: var(--link-hover);
+}
+
+.toc-drawer {
+  grid-area: drawer;
+  margin: 0.85rem 0 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-elev);
+}
+
+.toc-drawer summary {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  list-style: none;
+}
+
+.toc-drawer summary::-webkit-details-marker {
+  display: none;
+}
+
+.toc-drawer summary::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.55rem;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  transform: rotate(-45deg);
+  flex: 0 0 auto;
+}
+
+.toc-drawer[open] summary::before {
+  transform: rotate(45deg) translateY(-2px);
+}
+
+.toc-drawer .toc-list {
+  margin: 0;
+  padding: 0 0.95rem 0.85rem 1.9rem;
+}
+
+.topic-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.75rem 1rem;
+  align-items: center;
+  margin-top: 2.5rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--line);
+}
+
+.topic-nav-next {
+  text-align: right;
+}
+
+.topic-jump {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.12rem;
+  min-height: 2.75rem;
+  max-width: 100%;
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
   color: var(--link);
+  text-decoration: none;
 }
 
-.toc .toc-sub {
+.topic-nav-next .topic-jump {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.topic-jump:hover,
+.topic-jump:focus-visible {
+  background: var(--pill);
+  color: var(--link-hover);
+}
+
+.topic-jump-kicker {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.topic-jump-title {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+a.cd-up {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.95rem;
+  border: 1px solid var(--clay);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+a.cd-up:hover,
+a.cd-up:focus-visible {
+  background: var(--clay);
+  color: var(--accent-contrast);
+}
+
+.toc .toc-sub,
+.toc-drawer .toc-sub {
   margin-left: 0.75rem;
 }
 
@@ -875,16 +1143,29 @@ div.language-zsh.highlighter-rouge::before {
   margin: 0;
 }
 
+@media (min-width: 861px) {
+  .toc-drawer {
+    display: none !important;
+  }
+}
+
 @media (max-width: 860px) {
-  .doc-layout {
-    grid-template-columns: 1fr;
+  .doc,
+  .doc.has-toc {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "crumbs"
+      "header"
+      "drawer"
+      "body";
   }
 
-  .toc {
-    position: static;
-    order: -1;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--line);
+  .doc.has-toc .toc:not([hidden]) {
+    display: none !important;
+  }
+
+  .toc-drawer:not([hidden]) {
+    display: block;
   }
 }
 
@@ -906,6 +1187,21 @@ div.language-zsh.highlighter-rouge::before {
   .brand-logo img {
     height: 36px;
   }
+
+  .topic-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .cd-up {
+    order: -1;
+    justify-self: start;
+  }
+
+  .topic-nav-next,
+  .topic-nav-next .topic-jump {
+    text-align: left;
+    align-items: flex-start;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -917,6 +1213,7 @@ div.language-zsh.highlighter-rouge::before {
   .site-header,
   .site-footer,
   .toc,
+  .toc-drawer,
   .copy-btn,
   .tag-bar {
     display: none !important;

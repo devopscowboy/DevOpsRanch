@@ -4,6 +4,16 @@ description: One sentence on what this sheet is for.
 tags:
   - topic
 # updated: 2026-10-30
+# A sheet with no parent is one card on /cheatsheets/.
+# To split a sheet later, add a landing page with:
+#   layout: section
+#   section: ansible
+#   short_title: Ansible
+# and topic files in _cheatsheets/ansible/ with:
+#   section: ansible
+#   parent: ansible
+#   order: 1
+# The sheets list shows the landing page only. Search still indexes topics.
 ---
 
 ## Section name
