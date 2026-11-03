@@ -5,7 +5,7 @@ tags:
   - Linux
   - Bash
   - RHCSA
-updated: 2026-11-02
+updated: 2026-11-03
 section: linux
 parent: linux
 order: 6
@@ -27,7 +27,7 @@ free -h
 
 `lsblk -f` is the map of disks, filesystems, and UUIDs. `parted` below destroys what is already on `/dev/sdb`.
 
-RHEL 9, and any GPT disk. The partition needs a name. `mkpart` does not format anything. `mkfs.xfs` does.
+RHEL 9 and 10, and any GPT disk. The partition needs a name. `mkpart` does not format anything. `mkfs.xfs` does.
 
 ```bash
 lsblk -f
@@ -65,7 +65,7 @@ sudo mount -a
 sudo lvextend -r -L +2G /dev/vgdata/lvapp
 ```
 
-`daemon-reload` rebuilds the mount units from fstab. On RHEL 8 and 9, `findmnt --verify` checks the file before a reboot. The RHEL 7 storage guide does not document that flag. Use `sudo mount -fav` there: `-f` fakes the mount, `-a` reads fstab, `-v` prints what it would do. `mount -a` mounts what is not mounted yet. `lvextend -r` grows the logical volume and the filesystem together. `+2G` adds two gigabytes. Without the plus sign, `-L 2G` sets the size to two gigabytes. XFS can grow only while it is mounted, which `lvextend -r` requires.
+`daemon-reload` rebuilds the mount units from fstab. On RHEL 8, 9, and 10, `findmnt --verify` checks the file before a reboot. The RHEL 7 storage guide does not document that flag. Use `sudo mount -fav` there: `-f` fakes the mount, `-a` reads fstab, `-v` prints what it would do. `mount -a` mounts what is not mounted yet. `lvextend -r` grows the logical volume and the filesystem together. `+2G` adds two gigabytes. Without the plus sign, `-L 2G` sets the size to two gigabytes. XFS can grow only while it is mounted, which `lvextend -r` requires.
 
 Swap is a logical volume plus an fstab line. `swapon -a` enables only the swap devices listed in fstab, so the device has to be turned on by path until that line exists.
 
@@ -94,4 +94,4 @@ The matching `/etc/fstab` line:
 nfs01:/exports/share /mnt/share nfs defaults,_netdev 0 0
 ```
 
-> XFS grows and never shrinks. A bad fstab line drops the host into emergency mode on the next boot. On RHEL 8 and 9 run `findmnt --verify` first. On RHEL 7 run `mount -fav`.
+> XFS grows and never shrinks. A bad fstab line drops the host into emergency mode on the next boot. On RHEL 8, 9, and 10 run `findmnt --verify` first. On RHEL 7 run `mount -fav`.

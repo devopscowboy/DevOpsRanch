@@ -1,0 +1,52 @@
+---
+layout: default
+---
+{% assign paired_lesson = site.lessons | where: "slug", page.slug | first %}
+{% assign lesson_pages = site.lessons | where: "parent", page.parent | sort: "order" %}
+{% assign next_lesson = nil %}
+{% for item in lesson_pages %}
+  {% if next_lesson == nil and item.order > page.order %}
+    {% assign next_lesson = item %}
+  {% endif %}
+{% endfor %}
+{% assign lab_home = site.labs | where: "section", page.parent | where_exp: "item", "item.parent == nil" | first %}
+<article class="doc">
+  {% include crumbs.html %}
+  <header class="doc-header">
+    <p class="kicker">Lab {% if page.number %}{{ page.number | escape }}{% endif %}{% if page.module %} · {{ page.module | escape }}{% endif %}</p>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.description %}
+      <p class="lede">{{ page.description | escape }}</p>
+    {% endif %}
+    {% if page.updated %}
+      <p class="meta">Updated <time datetime="{{ page.updated | date: '%Y-%m-%d' }}">{{ page.updated | date: "%B %-d, %Y" }}</time></p>
+    {% endif %}
+  </header>
+  {% include doc-toc.html %}
+  <div class="doc-main">
+    <div class="prose">
+      {{ content }}
+    </div>
+    <nav class="topic-nav" aria-label="Lab">
+      <div class="topic-nav-prev">
+        {% if paired_lesson %}
+          <a class="topic-jump" href="{{ paired_lesson.url | relative_url }}">
+            <span class="topic-jump-kicker">Lesson</span>
+            <span class="topic-jump-title">{{ paired_lesson.title | escape }}</span>
+          </a>
+        {% endif %}
+      </div>
+      {% if lab_home %}
+        <a class="cd-up" href="{{ lab_home.url | relative_url }}" aria-label="Back to {{ lab_home.title | escape }} labs">cd ..</a>
+      {% endif %}
+      <div class="topic-nav-next">
+        {% if next_lesson %}
+          <a class="topic-jump" rel="next" href="{{ next_lesson.url | relative_url }}">
+            <span class="topic-jump-kicker">Next lesson</span>
+            <span class="topic-jump-title">{{ next_lesson.title | escape }}</span>
+          </a>
+        {% endif %}
+      </div>
+    </nav>
+  </div>
+</article>

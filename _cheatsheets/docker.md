@@ -3,6 +3,8 @@ title: Docker
 description: Run containers, build images, and drive Compose without the cleanup surprises.
 tags:
   - Docker
+order: 4
+published: false
 ---
 
 Examples use `docker compose` (the v2 plugin). The older standalone binary is `docker-compose`.

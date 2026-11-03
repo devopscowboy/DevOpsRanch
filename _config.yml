@@ -1,6 +1,6 @@
 title: DevOps Ranch
-description: Cheat sheets and labs for working DevOps engineers.
-tagline: Cheat sheets and labs for working DevOps engineers.
+description: Linux lessons, labs, and cheat sheets for the RHCSA.
+tagline: Linux lessons, labs, and cheat sheets for the RHCSA.
 url: https://devopsranch.com
 baseurl: ""
 lang: en
@@ -20,6 +20,11 @@ social:
 # GitHub Pages defaults to the Primer theme. Null keeps our layouts and CSS.
 theme: null
 
+# jekyll-sitemap is on the GitHub Pages whitelist. Listing it here makes
+# the local build emit the same sitemap production does.
+plugins:
+  - jekyll-sitemap
+
 markdown: kramdown
 highlighter: rouge
 kramdown:
@@ -35,12 +40,18 @@ kramdown:
 collections:
   cheatsheets:
     output: true
-    # :path keeps git.md at /cheatsheets/git/ and a file at
-    # _cheatsheets/linux/files-and-directories.md at
-    # /cheatsheets/linux/files-and-directories/. A section landing
+    # :path keeps a file at _cheatsheets/linux/files-and-directories.md
+    # at /cheatsheets/linux/files-and-directories/. A section landing
     # sets `section` and no `parent`. A topic sets `parent` and `order`.
-    # The sheets list hides every page that has a parent.
+    # Lists sort by `order`, not by title. Linux is order 1.
+    # published: false keeps the file in the repo and skips the page.
     permalink: /cheatsheets/:path/
+  lessons:
+    output: true
+    permalink: /lessons/:path/
+  labs:
+    output: true
+    permalink: /labs/:path/
   notes:
     output: true
     permalink: /notes/:name/
@@ -51,6 +62,18 @@ defaults:
       type: cheatsheets
     values:
       layout: cheatsheet
+      tags: []
+  - scope:
+      path: ""
+      type: lessons
+    values:
+      layout: lesson
+      tags: []
+  - scope:
+      path: ""
+      type: labs
+    values:
+      layout: lab
       tags: []
   - scope:
       path: ""

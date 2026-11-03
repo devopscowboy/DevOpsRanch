@@ -1,0 +1,30 @@
+---
+layout: default
+---
+{% assign paired_lab = site.labs | where: "slug", page.slug | first %}
+<article class="doc">
+  {% include crumbs.html %}
+  <header class="doc-header">
+    <p class="kicker">Lesson {% if page.number %}{{ page.number | escape }}{% endif %}{% if page.module %} · {{ page.module | escape }}{% endif %}</p>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.description %}
+      <p class="lede">{{ page.description | escape }}</p>
+    {% endif %}
+    {% if page.objective %}
+      <p class="meta">{{ page.objective | escape }}</p>
+    {% endif %}
+    {% if page.updated %}
+      <p class="meta">Updated <time datetime="{{ page.updated | date: '%Y-%m-%d' }}">{{ page.updated | date: "%B %-d, %Y" }}</time></p>
+    {% endif %}
+  </header>
+  {% include doc-toc.html %}
+  <div class="doc-main">
+    <div class="prose">
+      {{ content }}
+      {% if paired_lab %}
+        <p class="lesson-action"><a class="cd-up" href="{{ paired_lab.url | relative_url }}">Do the lab</a></p>
+      {% endif %}
+    </div>
+    {% include topic-pager.html sequence=site.lessons %}
+  </div>
+</article>

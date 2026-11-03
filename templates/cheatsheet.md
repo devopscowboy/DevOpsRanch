@@ -4,6 +4,11 @@ description: One sentence on what this sheet is for.
 tags:
   - topic
 # updated: 2026-10-30
+# order: 2
+# published: false
+# Lists sort by order, not by title. Linux is order 1, so a new
+# sheet uses 2 or higher. published: false hides the page and keeps
+# the file. Set published: true to put it back. See the README.
 # A sheet with no parent is one card on /cheatsheets/.
 # To split a sheet later, add a landing page with:
 #   layout: section

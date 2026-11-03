@@ -1,0 +1,304 @@
+# Linux / RHCSA track. The landing pages read this file in order.
+# A row becomes a link only when a published lesson (and, on the labs
+# page, a published lab) exists with the same slug. Until then the row
+# is text, with no URL. See README for how to publish the next one.
+#
+# The objectives are Red Hat's published EX200 study points for
+# Red Hat Enterprise Linux 10, grouped into modules. The filesystem
+# lesson is first because every later task uses a path. Firewalld is
+# listed once and covers both the networking study point and the
+# security study point, which name the same task.
+exam: EX200
+basis: Red Hat Enterprise Linux 10
+modules:
+  - title: Basics
+    summary: The filesystem, the shell prompt, and where help lives on the host.
+    lessons:
+      - order: 1
+        slug: filesystem
+        title: The filesystem and absolute paths
+        objective: Read the directory tree, and tell an absolute path from a relative path.
+      - order: 2
+        slug: shell-prompt
+        title: A shell prompt and the first commands
+        objective: Access a shell prompt and issue commands with correct syntax.
+      - order: 3
+        slug: documentation
+        title: System documentation
+        objective: Locate, read, and use system documentation including man, info, and files in /usr/share/doc.
+
+  - title: "Files & text"
+    summary: Move bytes around, then read and change what is in a file.
+    lessons:
+      - order: 4
+        slug: redirection
+        title: Redirection
+        objective: "Use input-output redirection (>, >>, |, 2>, and so on)."
+      - order: 5
+        slug: grep
+        title: Search with grep
+        objective: Use grep and regular expressions to analyze text.
+      - order: 6
+        slug: edit-text
+        title: Create and edit text files
+        objective: Create and edit text files.
+      - order: 7
+        slug: files
+        title: Files and directories
+        objective: Create, delete, copy, and move files and directories.
+      - order: 8
+        slug: links
+        title: Hard and soft links
+        objective: Create hard and soft links.
+      - order: 9
+        slug: archives
+        title: Archives
+        objective: Archive, compress, unpack, and uncompress files using tar, gzip, and bzip2.
+
+  - title: "Users & groups"
+    summary: Accounts, SSH, and moving a file to another host.
+    lessons:
+      - order: 10
+        slug: ssh
+        title: Access a remote system with SSH
+        objective: Access remote systems using SSH.
+      - order: 11
+        slug: switch-user
+        title: Log in and switch users
+        objective: Log in and switch users in multi-user targets.
+      - order: 12
+        slug: user-accounts
+        title: Local user accounts
+        objective: Create, delete, and modify local user accounts.
+      - order: 13
+        slug: passwords
+        title: Passwords and aging
+        objective: Change passwords and adjust password aging for local user accounts.
+      - order: 14
+        slug: groups
+        title: Groups and membership
+        objective: Create, delete, and modify local groups and group memberships.
+      - order: 15
+        slug: privileged
+        title: Privileged access
+        objective: Configure privileged access.
+      - order: 16
+        slug: ssh-keys
+        title: SSH keys
+        objective: Configure key-based authentication for SSH.
+      - order: 17
+        slug: transfer
+        title: Copy files between systems
+        objective: Securely transfer files between systems.
+
+  - title: Permissions
+    summary: Who can read, change, and enter a file.
+    lessons:
+      - order: 18
+        slug: modes
+        title: Permissions
+        objective: List, set, and change standard ugo/rwx permissions.
+      - order: 19
+        slug: umask
+        title: Default permissions
+        objective: Manage default file permissions.
+      - order: 20
+        slug: permission-problems
+        title: Permission problems
+        objective: Diagnose and correct file permission problems.
+
+  - title: Processes
+    summary: What is running, and how much of the machine it may use.
+    lessons:
+      - order: 21
+        slug: processes
+        title: Processes
+        objective: Identify CPU and memory intensive processes and kill processes.
+      - order: 22
+        slug: nice
+        title: Process priority
+        objective: Adjust process scheduling.
+      - order: 23
+        slug: tuned
+        title: Tuning profiles
+        objective: Manage tuning profiles.
+
+  - title: Storage
+    summary: Disks, LVM, filesystems, and the mounts that survive a reboot.
+    lessons:
+      - order: 24
+        slug: partitions
+        title: GPT partitions
+        objective: List, create, and delete partitions on GPT disks.
+      - order: 25
+        slug: physical-volumes
+        title: Physical volumes
+        objective: Create and remove physical volumes.
+      - order: 26
+        slug: volume-groups
+        title: Volume groups
+        objective: Assign physical volumes to volume groups.
+      - order: 27
+        slug: logical-volumes
+        title: Logical volumes
+        objective: Create and delete logical volumes.
+      - order: 28
+        slug: fstab
+        title: Mount by UUID or label
+        objective: Configure systems to mount file systems at boot by universally unique ID (UUID) or label.
+      - order: 29
+        slug: add-storage
+        title: Add storage without destroying data
+        objective: Add new partitions and logical volumes, and swap to a system non-destructively.
+      - order: 30
+        slug: filesystems
+        title: "VFAT, ext4, and XFS"
+        objective: "Create, mount, unmount, and use VFAT, ext4, and XFS file systems."
+      - order: 31
+        slug: nfs
+        title: NFS
+        objective: Mount and unmount network file systems using NFS.
+      - order: 32
+        slug: autofs
+        title: autofs
+        objective: Configure autofs.
+      - order: 33
+        slug: extend-lv
+        title: Extend a logical volume
+        objective: Extend existing logical volumes.
+
+  - title: Networking
+    summary: An address, a name, and a firewall that still exists after reboot.
+    lessons:
+      - order: 34
+        slug: addresses
+        title: IPv4 and IPv6 addresses
+        objective: Configure IPv4 and IPv6 addresses.
+      - order: 35
+        slug: hostname
+        title: Hostname resolution
+        objective: Configure hostname resolution.
+      - order: 36
+        slug: network-boot
+        title: Start networking at boot
+        objective: Configure network services to start automatically at boot.
+      - order: 37
+        slug: firewall
+        title: firewalld
+        objective: Restrict network access and configure firewall settings using firewalld and firewall-cmd.
+
+  - title: "Services & boot"
+    summary: Boot the host, keep a service up, and read what it logged.
+    lessons:
+      - order: 38
+        slug: power
+        title: "Boot, reboot, and shut down"
+        objective: Boot, reboot, and shut down a system normally.
+      - order: 39
+        slug: isolate
+        title: Switch targets by hand
+        objective: Boot systems into different targets manually.
+      - order: 40
+        slug: rd-break
+        title: Reset a lost root password
+        objective: Interrupt the boot process in order to gain access to a system.
+      - order: 41
+        slug: journals
+        title: Logs and the journal
+        objective: Locate and interpret system log files and journals.
+      - order: 42
+        slug: journal-persist
+        title: Keep the journal across reboots
+        objective: Preserve system journals.
+      - order: 43
+        slug: service-status
+        title: Network service status
+        objective: Start, stop, and check the status of network services.
+      - order: 44
+        slug: scheduling
+        title: "at, cron, and timers"
+        objective: "Schedule tasks using at, cron, and systemd timer units."
+      - order: 45
+        slug: enable-services
+        title: Enable a service at boot
+        objective: Start and stop services and configure services to start automatically at boot.
+      - order: 46
+        slug: default-target
+        title: Default boot target
+        objective: Configure systems to boot into a specific target automatically.
+      - order: 47
+        slug: time
+        title: Time synchronization
+        objective: Configure time service clients.
+      - order: 48
+        slug: bootloader
+        title: The bootloader
+        objective: Modify the system bootloader.
+
+  - title: Packages
+    summary: RPM, Flatpak, and installing from a repo or a local file.
+    lessons:
+      - order: 49
+        slug: rpm-repos
+        title: RPM repositories
+        objective: Configure access to RPM repositories.
+      - order: 50
+        slug: rpm-packages
+        title: Install and remove RPM packages
+        objective: Install and remove RPM software packages.
+      - order: 51
+        slug: flatpak-repos
+        title: Flatpak repositories
+        objective: Configure access to Flatpak repositories.
+      - order: 52
+        slug: flatpak-packages
+        title: Install and remove Flatpak packages
+        objective: Install and remove Flatpak software packages.
+      - order: 53
+        slug: updates
+        title: Install and update software
+        objective: Install and update software packages from Red Hat Content Delivery Network, a remote repository, or from the local file system.
+
+  - title: Shell scripts
+    summary: A short bash script that takes arguments and makes a decision.
+    lessons:
+      - order: 54
+        slug: conditionals
+        title: Conditions in a script
+        objective: "Conditionally execute code (if, test, [], and so on)."
+      - order: 55
+        slug: loops
+        title: Loops
+        objective: Use looping constructs (for, and so on) to process file and command-line input.
+      - order: 56
+        slug: script-args
+        title: Script arguments
+        objective: "Process script inputs ($1, $2, and so on)."
+      - order: 57
+        slug: script-output
+        title: Command output in a script
+        objective: Process the output of shell commands within a script.
+
+  - title: SELinux
+    summary: Modes, contexts, ports, and booleans. Firewalld is the networking lesson.
+    lessons:
+      - order: 58
+        slug: selinux-mode
+        title: Enforcing and permissive
+        objective: Set enforcing and permissive modes for SELinux.
+      - order: 59
+        slug: selinux-context
+        title: File and process context
+        objective: List and identify SELinux file and process context.
+      - order: 60
+        slug: restorecon
+        title: Restore file contexts
+        objective: Restore default file contexts.
+      - order: 61
+        slug: selinux-ports
+        title: SELinux port labels
+        objective: Manage SELinux port labels.
+      - order: 62
+        slug: selinux-booleans
+        title: SELinux booleans
+        objective: Use Boolean settings to modify system SELinux settings.

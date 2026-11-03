@@ -6,6 +6,8 @@ tags:
   - Kubernetes
   - EX280
 updated: 2026-10-30
+order: 6
+published: false
 ---
 
 `oc` accepts the same resource verbs as `kubectl`. Get, describe, logs, apply, diff, rollout, scale, port-forward, top, cordon, and drain are on the [kubectl sheet](/cheatsheets/kubectl/). This page is what OpenShift adds, plus the EX280 admin tasks those verbs do not cover. `oc logs --previous` is `kubectl logs --previous`. `oc auth can-i` is `kubectl auth can-i`.

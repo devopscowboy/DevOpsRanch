@@ -5,6 +5,8 @@ tags:
   - Python
   - Automation
 updated: 2026-10-30
+order: 9
+published: false
 ---
 
 This is the slice used to automate a host, an API, or a cluster. It is not a language tutorial. Shell commands the scripts call out to are on the [Linux sheet](/cheatsheets/linux/) and the [OpenShift sheet](/cheatsheets/openshift/).

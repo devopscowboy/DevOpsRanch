@@ -3,7 +3,11 @@ title: Note title
 description: One sentence summary of the note.
 tags:
   - notes
+# published: false
 # updated: 2026-10-30
+# Notes are hidden while the site is Linux-only. Remove published: false
+# (and publish notes.html, then add the Notes link back to the header)
+# when a note should go live. See the README.
 ---
 
 Write the note in Markdown. Headings, lists, and fenced code all work. Code blocks get the same copy button as the cheat sheets.

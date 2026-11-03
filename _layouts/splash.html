@@ -48,17 +48,22 @@
       <p class="splash-tagline">{{ page.tagline | escape }}</p>
     {% endif %}
     {% comment %}
-      page.actions is the front door. Add Labs later as another entry.
-      Set disabled: true for a non-link "Coming soon" control.
+      Published lesson tracks, sorted by order. Linux is 1.
+      Each track offers Lessons, Labs, and Cheat Sheets.
     {% endcomment %}
-    {% if page.actions.size > 0 %}
-      <nav class="splash-actions" aria-label="Enter the site">
-        {% for action in page.actions %}
-          {% if action.disabled %}
-            <button type="button" class="splash-btn is-disabled" disabled>{{ action.label | escape }}{% if action.note %} <span class="splash-soon">{{ action.note | escape }}</span>{% endif %}</button>
-          {% else %}
-            <a class="splash-btn" href="{{ action.href | relative_url }}">{{ action.label | escape }}</a>
-          {% endif %}
+    {% assign tracks = site.lessons | where_exp: "item", "item.parent == nil" | sort: "order" %}
+    {% if tracks.size > 0 %}
+      <nav class="splash-tracks" aria-label="Enter the site">
+        {% for track in tracks %}
+          {% assign track_name = track.short_title | default: track.title %}
+          <section class="splash-track">
+            <h2 class="splash-track-name">{{ track_name | escape }}</h2>
+            <div class="splash-actions">
+              <a class="splash-btn" href="{{ track.url | relative_url }}" aria-label="{{ track_name | escape }} lessons">Lessons</a>
+              <a class="splash-btn" href="{{ track.labs | relative_url }}" aria-label="{{ track_name | escape }} labs">Labs</a>
+              <a class="splash-btn" href="{{ track.sheets | relative_url }}" aria-label="{{ track_name | escape }} cheat sheets">Cheat Sheets</a>
+            </div>
+          </section>
         {% endfor %}
       </nav>
     {% endif %}

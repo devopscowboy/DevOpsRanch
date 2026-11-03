@@ -120,9 +120,9 @@
       input.setAttribute("aria-expanded", "true");
       var emptyHit = document.createElement("p");
       emptyHit.className = "search-empty";
-      emptyHit.textContent = "No matching sheets or notes.";
+      emptyHit.textContent = "No matching lessons, labs, or sheets.";
       results.appendChild(emptyHit);
-      if (status) status.textContent = "No matching sheets or notes.";
+      if (status) status.textContent = "No matching lessons, labs, or sheets.";
       return;
     }
     hits.forEach(function (hit, index) {
@@ -401,6 +401,8 @@
     });
 
     document.addEventListener("keydown", function (event) {
+      var dialog = document.getElementById("path-dialog");
+      if (dialog && !dialog.hidden) return;
       var tag = document.activeElement && document.activeElement.tagName;
       if (event.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA" && !event.metaKey && !event.ctrlKey && !event.altKey) {
         event.preventDefault();
@@ -416,8 +418,87 @@
     });
   });
 
+  function focusableIn(panel) {
+    return Array.prototype.slice.call(panel.querySelectorAll(
+      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    )).filter(function (el) {
+      return el.getClientRects().length > 0;
+    });
+  }
+
+  function initPathDialog() {
+    var dialog = document.getElementById("path-dialog");
+    var openBtn = document.getElementById("path-info");
+    if (!dialog || !openBtn) return;
+    var panel = dialog.querySelector(".path-dialog-panel");
+    var lastFocus = null;
+
+    function openDialog() {
+      lastFocus = document.activeElement;
+      dialog.hidden = false;
+      document.body.classList.add("path-dialog-open");
+      openBtn.setAttribute("aria-expanded", "true");
+      var closeBtn = dialog.querySelector(".path-dialog-close");
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeDialog() {
+      if (dialog.hidden) return;
+      dialog.hidden = true;
+      document.body.classList.remove("path-dialog-open");
+      openBtn.setAttribute("aria-expanded", "false");
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+      else openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openDialog);
+    dialog.addEventListener("click", function (event) {
+      if (event.target === dialog || event.target.closest("[data-close]")) closeDialog();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (dialog.hidden) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        closeDialog();
+        return;
+      }
+      if (event.key !== "Tab" || !panel) return;
+      var items = focusableIn(panel);
+      if (!items.length) {
+        event.preventDefault();
+        return;
+      }
+      var first = items[0];
+      var last = items[items.length - 1];
+      var active = document.activeElement;
+      if (!panel.contains(active)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+        return;
+      }
+      if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
+  function respectDemoMotion() {
+    if (!window.matchMedia || !window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document.querySelectorAll("video.demo-video").forEach(function (video) {
+      video.removeAttribute("autoplay");
+      video.pause();
+    });
+  }
+
   attachCopyButtons();
   buildToc();
+  initPathDialog();
+  respectDemoMotion();
 
   var initial = new URLSearchParams(window.location.search).get("tag") || "";
   activeTag = initial;

@@ -5,13 +5,15 @@ tags:
   - Linux
   - Bash
   - RHCSA
-updated: 2026-11-02
+updated: 2026-11-03
 section: linux
 parent: linux
 order: 1
 ---
 
 ## Getting started
+
+Taught from zero in [The filesystem and absolute paths](/lessons/linux/filesystem/) and [A shell prompt and the first commands](/lessons/linux/shell-prompt/).
 
 These are the commands to learn first on a RHEL host: who you are, where you are, and how to move around. The `$` in front of an example is the shell prompt. Do not type it.
 
@@ -21,19 +23,19 @@ These are the commands to learn first on a RHEL host: who you are, where you are
 whoami
 ```
 
-`pwd` - Prints the name of the current working directory: the full path of the folder you are in. Use it when you are lost, and before you copy or delete anything, so you know which directory the next command will touch. `-P` prints the physical path, with symbolic links resolved.
+`pwd` - Prints the absolute path of the current working directory. Use it when you are lost, and before you copy or delete anything, so you know which directory the next command will touch.
 
 ```bash
 pwd
 ```
 
-`ls` - Lists directory contents. Use it to see what is in a folder before you change into it or delete it. `-l` is the long list: permissions, owner, size, and date. A directory's long listing starts with `d`, which is how you know a name is a directory, as in `ls -l /tmp`. `-a` includes hidden names, the ones that start with a dot, such as `.bashrc`. `-h` prints sizes in K, M, and G. It is usually combined with `-l`.
+`ls` - Lists directory contents. Use it to see what is in a folder before you change into it or delete it. `-l` is the long list: permissions, owner, size in bytes, and date. A directory's long listing starts with `d`, which is how you know a name is a directory, as in `ls -l /tmp`. `-a` includes hidden names, the ones that start with a dot, such as `.bashrc`.
 
 ```bash
 ls
 ls -l
 ls -a
-ls -lh /tmp
+ls -l /tmp
 ```
 
 `cd` - Changes the directory. `cd` is preceded by a directory name, as in `cd /tmp`. A path that starts with `/` is absolute: it means the same place no matter where you are. A path with no leading `/` is relative: it starts from the directory you are in now, so `cd projects` only works when `projects` is here. `cd ..` goes up one directory. `cd ~` goes to your home directory, which on RHEL is `/home/` plus your username. `~` is short for that path. `cd -` returns to the previous directory. `cd` with no path also goes home.
@@ -107,15 +109,15 @@ These are the directories at the top of a RHEL system. The names are the same on
 
 ```bash
 pwd
-ls -lah
+ls -l
+ls -a
 cd -
 whoami
 id
-uname -a
 cat /etc/os-release
 ```
 
-`ls -lah` is long form, including dotfiles, with human sizes. `cd -` returns to the previous directory. `id` shows the uid, the primary group, and every supplementary group.
+`ls -l` is the long list. `ls -a` includes dotfiles. `cd -` returns to the previous directory. `id` shows the uid, the primary group, and every supplementary group.
 
 ## Find it yourself
 
@@ -127,6 +129,6 @@ ls /usr/share/doc
 systemctl --help
 ```
 
-`man -k` searches page titles and summaries. Section 1 is user commands, section 5 is file formats (`man 5 crontab`, `man 5 fstab`, `man 5 sudoers`), and section 8 is administration commands. `/usr/share/doc` is the documentation installed with packages. Any command's `--help` is the short flag list. `tldr tar` is example-first help, and it is not part of RHEL. Install it only on a machine where you are allowed to add tools.
+`man -k` searches page titles and summaries. Section 1 is user commands, section 5 is file formats (`man 5 crontab`, `man 5 fstab`, `man 5 sudoers`), and section 8 is administration commands. `/usr/share/doc` is the documentation installed with packages. Any command's `--help` is the short flag list.
 
 > Red Hat exams allow the product documentation on the system and disallow personal notes. `man -k`, `man 5`, and `/usr/share/doc` are the habit those exams grade.

@@ -5,7 +5,7 @@ tags:
   - Linux
   - Bash
   - RHCSA
-updated: 2026-11-02
+updated: 2026-11-03
 section: linux
 parent: linux
 order: 4
@@ -24,7 +24,6 @@ umask
 umask 022
 setfacl -m u:alice:rwx file
 getfacl file
-find dir -type d -exec chmod 755 {} +
 ```
 
 The digits are read=4, write=2, execute=1, summed for owner, group, and everyone else. `644` is `rw-r--r--`. `755` is `rwxr-xr-x`.
@@ -39,7 +38,7 @@ Capital `X` adds execute only on directories and on files that are already execu
 
 ## SELinux
 
-Install `semanage` before the `semanage` lines. RHEL 8 and 9: `policycoreutils-python-utils`. RHEL 7: `policycoreutils-python`.
+Install `semanage` before the `semanage` lines. RHEL 8, 9, and 10: `policycoreutils-python-utils`. RHEL 7: `policycoreutils-python`.
 
 ```bash
 getenforce

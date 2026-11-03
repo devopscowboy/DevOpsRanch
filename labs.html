@@ -1,0 +1,24 @@
+---
+layout: default
+title: Labs
+permalink: /labs/
+description: Hands-on labs that match the lessons. You run them on your own RHEL VM.
+---
+{% assign tracks = site.labs | where_exp: "item", "item.parent == nil" | sort: "order" %}
+
+<header class="doc-header">
+  {% include crumbs.html %}
+  <p class="kicker">Practice</p>
+  <h1>Labs</h1>
+  <p class="lede">Tracks in foundation order. Linux is first. A lab is one exercise on your own RHEL virtual machine.</p>
+</header>
+
+{% if tracks.size == 0 %}
+  <p class="empty-state">No labs yet.</p>
+{% else %}
+  <div class="cards">
+    {% for track in tracks %}
+      {% include card.html item=track %}
+    {% endfor %}
+  </div>
+{% endif %}
