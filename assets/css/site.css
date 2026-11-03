@@ -1,9 +1,9 @@
-/* Black, white, and gold. Token names match the previous theme.
-   Dark is the default, including with no JavaScript and with no saved
-   preference. Light applies only when data-theme="light".
-   Headings use --clay (brass in light, gold in dark). Link text is black
-   in light and off-white in dark, and content links stay underlined, so a
-   link never reads as a gold heading. */
+/* Black, white, and gold. Dark is the default, including with no
+   JavaScript and with no saved preference. Light applies only when
+   data-theme="light" and is black on white. Gold is a heading color in
+   dark. In light it is only the active-nav underline and the code prompt.
+   Link text is black in light and off-white in dark, and content links
+   stay underlined. */
 :root {
   color-scheme: dark;
   --bg: #0B0B0C;
@@ -16,6 +16,8 @@
   --link: #F2F0EA;
   --link-hover: #FFFFFF;
   --clay: #E3BF6A;
+  --nav-mark: #E3BF6A;
+  --prompt: #E3BF6A;
   --pill: #1E1C17;
   --pill-ink: #E8D7AE;
   --code-bg: #050505;
@@ -32,24 +34,26 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #F7F5F0;
+  --bg: #FFFFFF;
   --bg-elev: #FFFFFF;
   --ink: #111111;
-  --muted: #55534E;
-  --line: #E2DED4;
-  --accent: #7D5E22;
+  --muted: #5F5F5F;
+  --line: #E4E4E4;
+  --accent: #111111;
   --accent-contrast: #FFFFFF;
   --link: #111111;
   --link-hover: #000000;
-  --clay: #7D5E22;
-  --pill: #F1EADB;
-  --pill-ink: #5A4316;
+  --clay: #0B0B0C;
+  --nav-mark: #B8913A;
+  --prompt: #B8913A;
+  --pill: #F1F1F1;
+  --pill-ink: #111111;
   --code-bg: #0B0B0C;
-  --code-fg: #EAE8E2;
-  --inline-code-bg: #EFEBE2;
-  --inline-code-fg: #3A2C10;
-  --callout: #F8F1E2;
-  --shadow: 0 1px 0 rgba(17, 17, 17, 0.05);
+  --code-fg: #F2F0EA;
+  --inline-code-bg: #F1F1F1;
+  --inline-code-fg: #111111;
+  --callout: #F1F1F1;
+  --shadow: 0 1px 0 rgba(17, 17, 17, 0.04);
 }
 
 *,
@@ -82,6 +86,11 @@ body {
 ::selection {
   background: #E3BF6A;
   color: #111111;
+}
+
+:root[data-theme="light"] ::selection {
+  background: #111111;
+  color: #FFFFFF;
 }
 
 img {
@@ -224,7 +233,7 @@ h1, h2, h3, h4 {
 
 .site-nav a[aria-current="page"] {
   font-weight: 600;
-  box-shadow: inset 0 -2px 0 var(--clay);
+  box-shadow: inset 0 -2px 0 var(--nav-mark);
 }
 
 .search-form {
@@ -239,6 +248,10 @@ h1, h2, h3, h4 {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0.48rem 0.8rem;
+}
+
+:root[data-theme="light"] .search-form input {
+  background: #FAFAFA;
 }
 
 .search-results {
@@ -283,6 +296,10 @@ h1, h2, h3, h4 {
   font-weight: 600;
 }
 
+:root[data-theme="light"] .search-kind {
+  color: var(--muted);
+}
+
 .search-hit strong {
   display: block;
   font-family: var(--mono);
@@ -308,6 +325,11 @@ mark {
   color: #111111;
   border-radius: 2px;
   padding: 0 0.12em;
+}
+
+:root[data-theme="light"] mark {
+  background: #111111;
+  color: #FFFFFF;
 }
 
 .theme-toggle {
@@ -348,6 +370,10 @@ main {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--clay);
+}
+
+:root[data-theme="light"] .kicker {
+  color: var(--muted);
 }
 
 h1 {
@@ -557,6 +583,14 @@ a.card p {
   color: var(--ink);
 }
 
+:root[data-theme="light"] .prose blockquote {
+  border-left-color: var(--line);
+}
+
+:root[data-theme="light"] .prose th {
+  color: var(--muted);
+}
+
 .prose blockquote p:first-child {
   margin-top: 0;
 }
@@ -713,7 +747,7 @@ div.language-zsh.highlighter-rouge::before {
   z-index: 1;
   top: 0.95rem;
   left: 0.85rem;
-  color: #E3BF6A;
+  color: var(--prompt);
   font-family: var(--mono);
   font-size: 0.9rem;
   font-weight: 500;
