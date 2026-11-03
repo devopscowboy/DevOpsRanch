@@ -5,6 +5,18 @@ url: https://devopsranch.com
 baseurl: ""
 lang: en
 
+# Footer and splash. Change a URL here and both places update.
+social:
+  - name: X
+    icon: x
+    url: https://x.com/devopsranch
+  - name: YouTube
+    icon: youtube
+    url: https://www.youtube.com/channel/UCkKlPvYZSi13JRBS_sfCzgQ
+  - name: Instagram
+    icon: instagram
+    url: https://www.instagram.com/devopsranch/
+
 # GitHub Pages defaults to the Primer theme. Null keeps our layouts and CSS.
 theme: null
 
