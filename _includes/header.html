@@ -2,11 +2,7 @@
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="{{ '/' | relative_url }}">
-      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
-        <rect x="1.2" y="1.2" width="29.6" height="29.6" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
-        <path d="M7 23.5h18M9.5 23.5V14M16 23.5V9M22.5 23.5V15.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-      </svg>
-      <span>DevOps Ranch</span>
+      <img class="brand-logo" src="{{ '/assets/img/devopsranch-logo.png' | relative_url }}" alt="DevOps Ranch" width="925" height="176">
     </a>
     <nav class="site-nav" aria-label="Primary">
       <a href="{{ '/' | relative_url }}" {% if page.url == "/" or page.collection == "cheatsheets" %}aria-current="page"{% endif %}>Sheets</a>
