@@ -1,0 +1,26 @@
+{%- assign crumb_raw = page.url | split: "/" -%}
+{%- capture crumb_joined -%}{%- for part in crumb_raw -%}{%- if part != "" -%}{{ part }}|{%- endif -%}{%- endfor -%}{%- endcapture -%}
+{%- assign crumb_joined = crumb_joined | strip -%}
+{%- assign crumb_segs = crumb_joined | split: "|" -%}
+{%- assign crumb_total = 0 -%}
+{%- for seg in crumb_segs -%}
+  {%- assign seg_clean = seg | strip -%}
+  {%- if seg_clean != "" -%}
+    {%- assign crumb_total = crumb_total | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+<nav class="crumbs" aria-label="Breadcrumb">
+  <ol class="crumb-line">
+    <li class="crumb-slot"><a class="crumb crumb-root" href="{{ '/' | relative_url }}" title="cd /" aria-label="Home">/</a></li>
+    {%- assign crumb_seen = 0 -%}
+    {%- assign crumb_path = "" -%}
+    {%- for seg in crumb_segs -%}
+      {%- assign seg_clean = seg | strip -%}
+      {%- if seg_clean != "" -%}
+        {%- assign crumb_seen = crumb_seen | plus: 1 -%}
+        {%- assign crumb_path = crumb_path | append: "/" | append: seg_clean -%}
+        <li class="crumb-slot">{%- if crumb_seen == crumb_total -%}<span class="crumb crumb-here" aria-current="page">{{ seg_clean | escape }}</span><span class="crumb-sep" aria-hidden="true">/</span>{%- else -%}<a class="crumb" href="{{ crumb_path | append: '/' | relative_url }}">{{ seg_clean | escape }}</a><span class="crumb-sep" aria-hidden="true">/</span>{%- endif -%}</li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ol>
+</nav>

@@ -9,7 +9,16 @@ permalink: /search.json
 {%- for sheet in sheets -%}
 {%- unless first_item -%},{%- endunless -%}
 {%- assign first_item = false -%}
-{"kind":"Cheat sheet","title":{{ sheet.title | jsonify }},"description":{{ sheet.description | default: "" | jsonify }},"tags":{{ sheet.tags | jsonify }},"url":{{ sheet.url | relative_url | jsonify }},"text":{{ sheet.content | strip_html | normalize_whitespace | jsonify }}}
+{%- assign kind = "Cheat sheet" -%}
+{%- if sheet.parent -%}
+{%- assign section_docs = site.cheatsheets | where: "section", sheet.parent -%}
+{%- for candidate in section_docs -%}
+{%- unless candidate.parent -%}
+{%- assign kind = candidate.title -%}
+{%- endunless -%}
+{%- endfor -%}
+{%- endif -%}
+{"kind":{{ kind | jsonify }},"title":{{ sheet.title | jsonify }},"description":{{ sheet.description | default: "" | jsonify }},"tags":{{ sheet.tags | jsonify }},"url":{{ sheet.url | relative_url | jsonify }},"text":{{ sheet.content | strip_html | normalize_whitespace | jsonify }}}
 {%- endfor -%}
 {%- for note in notes -%}
 {%- unless first_item -%},{%- endunless -%}

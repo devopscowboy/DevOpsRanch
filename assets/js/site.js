@@ -306,18 +306,18 @@
   }
 
   function buildToc() {
-    var toc = document.querySelector(".toc");
+    var toc = document.querySelector("nav.toc");
+    var drawer = document.querySelector(".toc-drawer");
     var prose = document.querySelector(".prose");
-    if (!toc || !prose) return;
+    if (!prose) return;
     var headings = prose.querySelectorAll("h2, h3");
     if (headings.length < 2) {
-      toc.remove();
+      if (toc) toc.remove();
+      if (drawer) drawer.remove();
       return;
     }
-    var label = document.createElement("p");
-    label.className = "toc-label";
-    label.textContent = "On this page";
     var list = document.createElement("ol");
+    list.className = "toc-list";
     headings.forEach(function (heading) {
       if (!heading.id) {
         heading.id = heading.textContent.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -330,9 +330,20 @@
       item.appendChild(link);
       list.appendChild(item);
     });
-    toc.appendChild(label);
-    toc.appendChild(list);
-    toc.hidden = false;
+    if (toc) {
+      var label = document.createElement("p");
+      label.className = "toc-label";
+      label.textContent = "On this page";
+      toc.appendChild(label);
+      toc.appendChild(list);
+      var doc = toc.closest(".doc");
+      if (doc) doc.classList.add("has-toc");
+      toc.hidden = false;
+    }
+    if (drawer) {
+      drawer.appendChild(list.cloneNode(true));
+      drawer.hidden = false;
+    }
   }
 
   function isDarkTheme() {

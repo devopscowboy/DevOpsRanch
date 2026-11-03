@@ -3,6 +3,7 @@
   {% if include.item.description %}
     <p>{{ include.item.description | escape }}</p>
   {% endif %}
+  {% unless include.hide_tags %}
   {% if include.item.tags.size > 0 %}
     <ul class="card-tags">
       {% for tag in include.item.tags %}
@@ -10,4 +11,5 @@
       {% endfor %}
     </ul>
   {% endif %}
+  {% endunless %}
 </a>

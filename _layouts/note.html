@@ -2,8 +2,8 @@
 layout: default
 ---
 <article class="doc">
+  {% include crumbs.html %}
   <header class="doc-header">
-    <p class="crumbs"><a href="{{ '/notes/' | relative_url }}">Notes</a> <span aria-hidden="true">/</span> {{ page.title | escape }}</p>
     <p class="kicker">Note</p>
     <h1>{{ page.title | escape }}</h1>
     {% if page.description %}
@@ -13,10 +13,10 @@ layout: default
       <p class="meta">Updated <time datetime="{{ page.updated | date: '%Y-%m-%d' }}">{{ page.updated | date: "%B %-d, %Y" }}</time></p>
     {% endif %}
   </header>
-  <div class="doc-layout">
+  {% include doc-toc.html %}
+  <div class="doc-main">
     <div class="prose">
       {{ content }}
     </div>
-    <nav class="toc" aria-label="On this page" hidden></nav>
   </div>
 </article>

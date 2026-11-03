@@ -23,7 +23,12 @@ kramdown:
 collections:
   cheatsheets:
     output: true
-    permalink: /cheatsheets/:name/
+    # :path keeps git.md at /cheatsheets/git/ and a file at
+    # _cheatsheets/linux/files-and-directories.md at
+    # /cheatsheets/linux/files-and-directories/. A section landing
+    # sets `section` and no `parent`. A topic sets `parent` and `order`.
+    # The sheets list hides every page that has a parent.
+    permalink: /cheatsheets/:path/
   notes:
     output: true
     permalink: /notes/:name/
