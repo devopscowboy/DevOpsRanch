@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# Build the production Coming Soon site into _site-coming-soon/.
+# Does not run Jekyll, does not write _site/, and does not modify source.
+# The destination is fixed. Arguments and environment overrides are rejected
+# so this command cannot be pointed at the full site or the source tree.
+set -euo pipefail
+
+if [[ $# -ne 0 ]]; then
+  echo "usage: ./script/build-coming-soon" >&2
+  echo "Output is always ./_site-coming-soon. No other destination is accepted." >&2
+  exit 2
+fi
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+DEST="$ROOT/_site-coming-soon"
+
+if [[ -L "$DEST" ]]; then
+  echo "refusing to build: $DEST is a symlink" >&2
+  exit 1
+fi
+
+if [[ "$(basename "$DEST")" != "_site-coming-soon" || "$(dirname "$DEST")" != "$ROOT" ]]; then
+  echo "refusing to build outside $ROOT/_site-coming-soon" >&2
+  exit 1
+fi
+
+case "$DEST" in
+  "$ROOT"|"$ROOT/_site"|"$ROOT/coming-soon"|"$ROOT/assets"|"$ROOT/_lessons"|"$ROOT/_labs"|"$ROOT/_cheatsheets"|"$ROOT/_notes")
+    echo "refusing to overwrite $DEST" >&2
+    exit 1
+    ;;
+esac
+
+if [[ ! -f "$ROOT/coming-soon/index.html" ]]; then
+  echo "missing $ROOT/coming-soon/index.html" >&2
+  exit 1
+fi
+
+rm -rf -- "$DEST"
+mkdir -p "$DEST"
+
+copy_asset() {
+  local rel="$1"
+  local src="$ROOT/$rel"
+  if [[ ! -f "$src" ]]; then
+    echo "missing source asset: $rel" >&2
+    exit 1
+  fi
+  mkdir -p "$DEST/$(dirname "$rel")"
+  cp -p "$src" "$DEST/$rel"
+}
+
+cp -p "$ROOT/coming-soon/index.html" "$DEST/index.html"
+cp -p "$ROOT/coming-soon/index.html" "$DEST/404.html"
+
+assets=(
+  assets/css/site.css
+  assets/favicon-32.png
+  assets/favicon-192.png
+  assets/apple-touch-icon.png
+  assets/img/logo-all-gold.png
+  assets/img/logo-all-gold.webp
+  assets/img/logo-all-gold-2x.webp
+  assets/img/logo-white-gold.png
+  assets/img/logo-white-gold.webp
+  assets/img/logo-white-gold-2x.webp
+)
+
+for rel in "${assets[@]}"; do
+  copy_asset "$rel"
+done
+
+for page in "$DEST/index.html" "$DEST/404.html"; do
+  if ! grep -q "Coming soon" "$page"; then
+    echo "coming-soon page is missing its heading: $page" >&2
+    exit 1
+  fi
+  if grep -E -q 'href="[^"]*(/lessons|/labs|/cheatsheets|/notes|/search)(/|")' "$page"; then
+    echo "coming-soon page links to learning content: $page" >&2
+    exit 1
+  fi
+  if grep -E -q 'github\.com|devopscowboy' "$page"; then
+    echo "coming-soon page includes a repository or account reference: $page" >&2
+    exit 1
+  fi
+done
+
+while IFS= read -r ref; do
+  [[ -n "$ref" ]] || continue
+  path="${ref%%\?*}"
+  if [[ ! -f "$DEST$path" ]]; then
+    echo "coming-soon page references missing asset: $path" >&2
+    exit 1
+  fi
+done < <(grep -oE '/assets/[^"'\''[:space:]]+' "$DEST/index.html" | sort -u)
+
+if [[ -e "$DEST/lessons" || -e "$DEST/labs" || -e "$DEST/cheatsheets" || -e "$DEST/notes" || -e "$DEST/search.json" || -e "$DEST/sitemap.xml" ]]; then
+  echo "coming-soon output contains learning routes" >&2
+  exit 1
+fi
+
+html_files="$(find "$DEST" -name '*.html' -printf '%P\n' | sort)"
+if [[ "$html_files" != $'404.html\nindex.html' ]]; then
+  echo "coming-soon output has unexpected HTML files:" >&2
+  echo "$html_files" >&2
+  exit 1
+fi
+
+echo "built $DEST"

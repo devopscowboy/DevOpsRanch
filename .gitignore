@@ -1,4 +1,5 @@
 _site/
+_site-coming-soon/
 .jekyll-cache/
 .sass-cache/
 .bundle/
