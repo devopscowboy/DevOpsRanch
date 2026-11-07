@@ -96,9 +96,22 @@ An optional `caption` is the text under the media. Paths start with `/assets/dem
 
 ## Build
 
+The default build is the full site. It is the output for the protected dev and test host:
+
 ```bash
 bundle install
+bundle exec jekyll build
 bundle exec jekyll serve
 ```
 
-The stack is the `github-pages` gem, so the local build matches GitHub Pages. No extra plugins.
+That writes `_site/`. Nothing about the Coming Soon page changes this command or this directory.
+
+Production is a second command with its own directory:
+
+```bash
+./script/build-coming-soon
+```
+
+That writes `_site-coming-soon/` and does not run Jekyll. The two commands can be run in either order. See `DEPLOYMENT.md` for which directory each host publishes.
+
+The stack is the `github-pages` gem, so the local full-site build matches the Jekyll site this repo already ships. No extra plugins.

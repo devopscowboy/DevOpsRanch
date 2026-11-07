@@ -95,3 +95,8 @@ exclude:
   - templates
   - .bundle
   - node_modules
+  # Separate production output. Excluding it keeps the default build
+  # from publishing the Coming Soon page or the build scripts.
+  - coming-soon
+  - script
+  - DEPLOYMENT.md
